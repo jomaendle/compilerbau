@@ -1,0 +1,7 @@
+# This is a comment!
+
+Integer main()
+{
+   print "Hello World\n";
+   return 0;
+}
