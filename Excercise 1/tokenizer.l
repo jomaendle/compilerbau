@@ -2,10 +2,9 @@
 
 %option noyywrap
 
-
 %{
- int    intval   = 0;
- double floatval = 0.0;
+ int rowCounter = 1;
+ int coloumnCounter = 1;
 %}
 
 DIGIT      [0-9]
@@ -14,89 +13,136 @@ EXP        [eE](\+|-)?{INT}
 REG        R{DIGIT}{DIGIT}?
 CHAR       [a-zA-Z]
 STRING     {CHAR}+
-OPENPAR    [(]
-CLOSEPAR   [)]
-OPENCURLY  [{]
-CLOSECURLY [}]
-PLUS       [+]
-MINUS      [-]
-DIVIDE     [/]
-MULT       [*]
-COMPARE    [=]
-GT         [>]
-LT         [<]
-NEQ        [!=]
-COM        [,]
-SEMI       [;]
+OPENPAR    "("
+CLOSEPAR   ")"
+OPENCURLY  "{"
+CLOSECURLY "}"
+PLUS       "+"
+MINUS      "-"
+DIVIDE     "/"
+MULT       "*"
+COMPARE    "="
+GT         ">"
+LT         "<"
+NEQ        "!="
+COM        ","
+SEMI       ";"
+SPACE      [ ]
+NEWLINE    \n
 
 INTLIT     [0-9]+
 STRINGLIT  \"[^"]*\"
 
+
 %%
 
+
 #[^\n]* {
-  /* eat comment */
+
 }
 
+
 {INTLIT} {
-  printf("INTEGER=\"%d\n", atoi(yytext));
+  printf("%4d, %4d : INTEGER=\"%d\"\n", rowCounter, coloumnCounter, atoi(yytext));
+  coloumnCounter += yyleng;
 }
 
 {STRINGLIT} {
-      printf("STRING=\"%s\n", yytext);
-    }
-{STRING} {
-  printf("STRING=\"%s\n", yytext);
+  printf("%4d, %4d : STRING=\"%s\"\n",rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
+{STRING} {
+  printf("%4d, %4d : STRING=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+
 {OPENPAR} {
-      printf("OPENPAR=\"%s\n", yytext);
-    }
+  printf("%4d, %4d : OPENPAR=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
 
 {CLOSEPAR} {
-      printf("CLOSEPAR=\"%s\n", yytext);
-    }
+  printf("%4d, %4d : CLOSEPAR=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
 {OPENCURLY} {
-      printf("OPENCURLY=\"%s\n", yytext);
-    }
+  printf("%4d, %4d : OPENCURLY=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
 
 {CLOSECURLY} {
-      printf("CLOSECURLY=\" %s\n", yytext);
-    }
+  printf("%4d, %4d : CLOSECURLY=\" %s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+
+
 {PLUS} {
-  printf("PLUS=\" %s\n", yytext);
+  printf("%4d, %4d : PLUS=\" %s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {MINUS} {
-  printf("MINUS=\"%s\n", yytext);
+  printf("%4d, %4d : MINUS=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {DIVIDE} {
-  printf("DIVIDE=\"%s\n", yytext);
+  printf("%4d, %4d : DIVIDE=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {MULT} {
-  printf("MULT=\"%s\n", yytext);
+  printf("%4d, %4d : MULT=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {COMPARE} {
-  printf("ASSIGN=\"%s\n", yytext);
+  printf("%4d, %4d : ASSIGN=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {GT} {
-  printf(">: %s\n", yytext);
+  printf("%4d, %4d : GREATER THAN: %s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {LT} {
-  printf("<: %s\n", yytext);
+  printf("%4d, %4d : LESS THAN: %s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {NEQ} {
-  printf("NEQ: %s\n", yytext);
+  printf("%4d, %4d : NEQ: %s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {COM} {
-  printf("COMA=\"%s\n", yytext);
+  printf("%4d, %4d : COMA=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
 }
+
 {SEMI} {
-  printf("SEMI=\"%s\n", yytext);
+  printf("%4d, %4d : SEMI=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+{SPACE} {
+  coloumnCounter++;
+}
+
+{NEWLINE} {
+  rowCounter++;
+  coloumnCounter = 1;
 }
 
 
 
-
-\n|. {
+. {
+    coloumnCounter++;
       /* Skip */
     }
 %%
@@ -111,5 +157,4 @@ int main( int argc, char **argv )
 
  yylex();
 
- printf("Final  %d : %f\n", intval, floatval);
 }
