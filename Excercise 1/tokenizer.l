@@ -12,7 +12,6 @@ INT        {DIGIT}+
 EXP        [eE](\+|-)?{INT}
 REG        R{DIGIT}{DIGIT}?
 CHAR       [a-zA-Z]
-STRING     {CHAR}+
 OPENPAR    "("
 CLOSEPAR   ")"
 OPENCURLY  "{"
@@ -29,7 +28,15 @@ COM        ","
 SEMI       ";"
 SPACE      [ ]
 NEWLINE    \n
+IF         "if"
+ELSE       "else"
+WHILE      "while"
+RETURN     "return"
+PRINT      "print"
+INTEGER    "Integer"
+STRING     "String"
 
+IDENT      [A-Za-z]([A-Za-z0-9])*
 INTLIT     [0-9]+
 STRINGLIT  \"[^"]*\"
 
@@ -41,6 +48,45 @@ STRINGLIT  \"[^"]*\"
 
 }
 
+{INTEGER} {
+  printf("%4d, %4d : Integer Statement=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+{STRING} {
+  printf("%4d, %4d : String Statement=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+{PRINT} {
+  printf("%4d, %4d : print Statement=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+{RETURN} {
+  printf("%4d, %4d : return Statement=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+{WHILE} {
+  printf("%4d, %4d : while Statement=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+{ELSE} {
+  printf("%4d, %4d : else Statement=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+{IF} {
+  printf("%4d, %4d : if Statement=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
+
+{IDENT} {
+  printf("%4d, %4d : Identifier=\"%s\"\n", rowCounter, coloumnCounter, yytext);
+  coloumnCounter += yyleng;
+}
 
 {INTLIT} {
   printf("%4d, %4d : INTEGER=\"%d\"\n", rowCounter, coloumnCounter, atoi(yytext));
@@ -49,11 +95,6 @@ STRINGLIT  \"[^"]*\"
 
 {STRINGLIT} {
   printf("%4d, %4d : STRING=\"%s\"\n",rowCounter, coloumnCounter, yytext);
-  coloumnCounter += yyleng;
-}
-
-{STRING} {
-  printf("%4d, %4d : STRING=\"%s\"\n", rowCounter, coloumnCounter, yytext);
   coloumnCounter += yyleng;
 }
 
