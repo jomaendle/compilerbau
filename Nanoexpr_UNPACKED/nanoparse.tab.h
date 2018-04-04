@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_PARSER_TAB_H_INCLUDED
-# define YY_YY_PARSER_TAB_H_INCLUDED
+#ifndef YY_YY_NANOPARSE_TAB_H_INCLUDED
+# define YY_YY_NANOPARSE_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -48,31 +48,14 @@ extern int yydebug;
     IDENT = 258,
     STRINGLIT = 259,
     INTLIT = 260,
-    INTEGER = 261,
-    STRING = 262,
-    IF = 263,
-    WHILE = 264,
-    RETURN = 265,
-    PRINT = 266,
-    ELSE = 267,
-    COMPARE = 268,
-    NEQ = 269,
-    LT = 270,
-    GT = 271,
-    LEQ = 272,
-    GEQ = 273,
-    PLUS = 274,
-    MINUS = 275,
-    MULT = 276,
-    DIVIDE = 277,
-    UMINUS = 278,
-    OPENPAR = 279,
-    CLOSEPAR = 280,
-    SEMI = 281,
-    COM = 282,
-    OPENCURLY = 283,
-    CLOSECURLY = 284,
-    ERROR = 285
+    PLUS = 261,
+    MINUS = 262,
+    MULT = 263,
+    DIV = 264,
+    UMINUS = 265,
+    OPENPAR = 266,
+    CLOSEPAR = 267,
+    ERROR = 268
   };
 #endif
 
@@ -102,4 +85,4 @@ extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
 int yyparse (void);
 
-#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_NANOPARSE_TAB_H_INCLUDED  */

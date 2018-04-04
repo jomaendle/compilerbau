@@ -3,15 +3,19 @@
 %{
    #include <stdio.h>
    #include <stdlib.h>
+   #include "ast.h"
 
    extern int yyerror(const char* err);
    extern int yylex(void);
    extern FILE *yyin;
+
+   AST_p ast;
 %}
 
 %locations
 
 %define parse.error verbose
+%define api.value.type {AST_p}
 
 %start prog
 
@@ -33,106 +37,106 @@
 
 %%
 
-prog: /* Nothing */
-    | prog def
+prog:  {$$ = 0;}
+    | prog def {$$ = 0;}
 ;
 
-def: vardef
-   | fundef
+def: vardef {$$ = 0;}
+   | fundef {$$ = 0;}
 ;
 
-vardef: type idlist SEMI
+vardef: type idlist SEMI {$$ = 0;}
 ;
 
-idlist: IDENT
-      | idlist COM IDENT
+idlist: IDENT {$$ = 0;}
+      | idlist COM IDENT {$$ = 0;}
 
-fundef: type IDENT OPENPAR params CLOSEPAR body
+fundef: type IDENT OPENPAR params CLOSEPAR body {$$ = 0;}
 ;
 
-type: STRING
-    | INTEGER
+type: STRING {$$ = 0;}
+    | INTEGER {$$ = 0;}
 ;
 
-params: /* empty */
-      | paramlist
+params:  {$$ = 0;}
+      | paramlist {$$ = 0;}
 ;
 
-paramlist: param
-         | paramlist COM param
+paramlist: param {$$ = 0;}
+         | paramlist COM param {$$ = 0;}
 ;
 
-param: type IDENT
+param: type IDENT {$$ = 0;}
 ;
 
-body: OPENCURLY vardefs stmts CLOSECURLY
+body: OPENCURLY vardefs stmts CLOSECURLY {$$ = 0;}
 ;
 
-vardefs: /* empty */
-       | vardefs vardef
+vardefs:  {$$ = 0;}
+       | vardefs vardef {$$ = 0;}
 ;
 
 
-stmts: /* empty */
-     | stmts stmt
+stmts:  {$$ = 0;}
+     | stmts stmt {$$ = 0;}
 ;
 
-stmt: while_stmt
-    | if_stmt
-    | ret_stmt
-    | print_stmt
-    | assign
-    | funcall_stmt
+stmt: while_stmt {$$ = 0;}
+    | if_stmt {$$ = 0;}
+    | ret_stmt {$$ = 0;}
+    | print_stmt {$$ = 0;}
+    | assign {$$ = 0;}
+    | funcall_stmt {$$ = 0;}
 ;
 
-while_stmt: WHILE OPENPAR boolexpr CLOSEPAR body
+while_stmt: WHILE OPENPAR boolexpr CLOSEPAR body {$$ = 0;}
 ;
 
-if_stmt: IF OPENPAR boolexpr CLOSEPAR body
-       | IF OPENPAR boolexpr CLOSEPAR body ELSE body
+if_stmt: IF OPENPAR boolexpr CLOSEPAR body {$$ = 0;}
+       | IF OPENPAR boolexpr CLOSEPAR body ELSE body {$$ = 0;}
 ;
 
-ret_stmt: RETURN expr SEMI
+ret_stmt: RETURN expr SEMI {$$ = 0;}
 ;
 
-print_stmt: PRINT expr SEMI
+print_stmt: PRINT expr SEMI {$$ = 0;}
 ;
 
-assign: IDENT COMPARE expr SEMI
+assign: IDENT COMPARE expr SEMI {$$ = 0;}
 ;
 
-funcall_stmt: funcall SEMI
+funcall_stmt: funcall SEMI {$$ = 0;}
 ;
 
-boolexpr: expr COMPARE expr
-        | expr NEQ expr
-        | expr LT expr
-        | expr GT expr
-        | expr LEQ expr
-        | expr GEQ expr
+boolexpr: expr COMPARE expr  {$$ = 0;}
+        | expr NEQ expr {$$ = 0;}
+        | expr LT expr {$$ = 0;}
+        | expr GT expr {$$ = 0;}
+        | expr LEQ expr {$$ = 0;}
+        | expr GEQ expr {$$ = 0;}
 ;
 
 expr: funcall
-    | INTLIT
-    | IDENT
-    | STRINGLIT
-    | OPENPAR expr CLOSEPAR
-    | expr PLUS expr
-    | expr MINUS expr
-    | expr MULT expr
-    | expr DIVIDE expr
-    | MINUS expr %prec UMINUS
+    | INTLIT  {$$ = $1;}
+    | IDENT   {$$ = $1;}
+    | STRINGLIT {$$ = $1;}
+    | OPENPAR expr CLOSEPAR {$$ = $2;ASTFree($1);ASTFree($3);}
+    | expr PLUS expr  {$$=ASTAlloc2(t_PLUS, NULL, 0, $1, $3);ASTFree($2);}
+    | expr MINUS expr {$$=ASTAlloc2(t_MINUS, NULL, 0, $1, $3);ASTFree($2);}
+    | expr MULT expr  {$$=ASTAlloc2(t_MULT, NULL, 0, $1, $3);ASTFree($2);}
+    | expr DIVIDE expr   {$$=ASTAlloc2(t_DIV, NULL, 0, $1, $3);ASTFree($2);}
+    | MINUS expr %prec UMINUS {$$=ASTAlloc2(t_MINUS, NULL, 0, $2, NULL);ASTFree($1);}
 ;
 
-funcall: IDENT OPENPAR args CLOSEPAR
+funcall: IDENT OPENPAR args CLOSEPAR {$$ = 0;}
 ;
 
-args: /* empty */
-    | arglist
+args:  {$$ = 0;}
+    | arglist {$$ = 0;}
 ;
 
-arglist: expr
-       | arglist COM expr
+arglist: expr {$$ = 0;}
+       | arglist COM expr {$$ = 0;}
 ;
 
 
@@ -144,14 +148,62 @@ int yyerror(const char* err){
 }
 
 
-int main( int argc, char **argv )
+int main (int argc, char* argv[])
 {
-    ++argv, --argc;
-    if(argc>0){
-      yyin = fopen(argv[0], "r");}
-      else{
-          yyin = stdin;
+  int i;
+  int res;
+  bool printdot   = false;
+  bool printexpr  = true;
+  bool printsexpr = false;
+
+   ++argv, --argc;  /* skip over program name */
+
+   if (argc > 0)
+   {
+      if(strcmp(argv[0], "--dot")==0)
+      {
+         printdot   = true;
+         printexpr  = false;
+         printsexpr = false;
+         ++argv, --argc;
       }
-      
-     return yyparse();
+      else if(strcmp(argv[0], "--sexpr")==0)
+      {
+         printdot   = false;
+         printexpr  = false;
+         printsexpr = true;
+         ++argv, --argc;
+      }
+   }
+
+   if ( argc > 0 )
+   {
+      yyin = fopen( argv[0], "r" );
+   }
+   else
+   {
+      yyin = stdin;
+   }
+
+   res = yyparse();
+
+   if(res == 0)
+   {
+      if(printdot)
+      {
+         DOTASTPrint(stdout, ast);
+      }
+      if(printexpr)
+      {
+         ExprASTPrint(stdout, ast);
+         printf("\n");
+      }
+      if(printsexpr)
+      {
+         SExprASTPrint(stdout, ast);
+         printf("\n");
+      }
+      ASTFree(ast);
+   }
+   return res;
 }

@@ -1,7 +1,8 @@
-# This is a comment!
+
 
 Integer main()
 {
-   "Hello World\n";
+   print "Hello World\n";
+   a = 10;
    return  0;
 }

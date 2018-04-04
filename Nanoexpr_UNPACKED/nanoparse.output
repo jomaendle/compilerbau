@@ -1,0 +1,274 @@
+Terminale, die in Grammatik unbenutzt sind
+
+   ERROR
+
+
+Grammatik
+
+    0 $accept: start $end
+
+    1 start: expr
+
+    2 expr: INTLIT
+    3     | IDENT
+    4     | STRINGLIT
+    5     | OPENPAR expr CLOSEPAR
+    6     | expr PLUS expr
+    7     | expr MINUS expr
+    8     | expr MULT expr
+    9     | expr DIV expr
+   10     | MINUS expr
+
+
+Terminale und die Regeln, in denen sie verwendet werden
+
+$end (0) 0
+error (256)
+IDENT (258) 3
+STRINGLIT (259) 4
+INTLIT (260) 2
+PLUS (261) 6
+MINUS (262) 7 10
+MULT (263) 8
+DIV (264) 9
+UMINUS (265)
+OPENPAR (266) 5
+CLOSEPAR (267) 5
+ERROR (268)
+
+
+Nicht-Terminal und die Regeln, in denen sie verwendet werden
+
+$accept (14)
+    auf der linken Seite: 0
+start (15)
+    auf der linken Seite: 1, auf der rechten Seite: 0
+expr (16)
+    auf der linken Seite: 2 3 4 5 6 7 8 9 10, auf der rechten Seite:
+    1 5 6 7 8 9 10
+
+
+Zustand 0
+
+    0 $accept: . start $end
+
+    IDENT      schiebe und gehe zu Zustand 1 über
+    STRINGLIT  schiebe und gehe zu Zustand 2 über
+    INTLIT     schiebe und gehe zu Zustand 3 über
+    MINUS      schiebe und gehe zu Zustand 4 über
+    OPENPAR    schiebe und gehe zu Zustand 5 über
+
+    start  gehe zu Zustand 6 über
+    expr   gehe zu Zustand 7 über
+
+
+Zustand 1
+
+    3 expr: IDENT .
+
+    $default  reduziere mit Regel 3 (expr)
+
+
+Zustand 2
+
+    4 expr: STRINGLIT .
+
+    $default  reduziere mit Regel 4 (expr)
+
+
+Zustand 3
+
+    2 expr: INTLIT .
+
+    $default  reduziere mit Regel 2 (expr)
+
+
+Zustand 4
+
+   10 expr: MINUS . expr
+
+    IDENT      schiebe und gehe zu Zustand 1 über
+    STRINGLIT  schiebe und gehe zu Zustand 2 über
+    INTLIT     schiebe und gehe zu Zustand 3 über
+    MINUS      schiebe und gehe zu Zustand 4 über
+    OPENPAR    schiebe und gehe zu Zustand 5 über
+
+    expr  gehe zu Zustand 8 über
+
+
+Zustand 5
+
+    5 expr: OPENPAR . expr CLOSEPAR
+
+    IDENT      schiebe und gehe zu Zustand 1 über
+    STRINGLIT  schiebe und gehe zu Zustand 2 über
+    INTLIT     schiebe und gehe zu Zustand 3 über
+    MINUS      schiebe und gehe zu Zustand 4 über
+    OPENPAR    schiebe und gehe zu Zustand 5 über
+
+    expr  gehe zu Zustand 9 über
+
+
+Zustand 6
+
+    0 $accept: start . $end
+
+    $end  schiebe und gehe zu Zustand 10 über
+
+
+Zustand 7
+
+    1 start: expr .
+    6 expr: expr . PLUS expr
+    7     | expr . MINUS expr
+    8     | expr . MULT expr
+    9     | expr . DIV expr
+
+    PLUS   schiebe und gehe zu Zustand 11 über
+    MINUS  schiebe und gehe zu Zustand 12 über
+    MULT   schiebe und gehe zu Zustand 13 über
+    DIV    schiebe und gehe zu Zustand 14 über
+
+    $default  reduziere mit Regel 1 (start)
+
+
+Zustand 8
+
+    6 expr: expr . PLUS expr
+    7     | expr . MINUS expr
+    8     | expr . MULT expr
+    9     | expr . DIV expr
+   10     | MINUS expr .
+
+    $default  reduziere mit Regel 10 (expr)
+
+
+Zustand 9
+
+    5 expr: OPENPAR expr . CLOSEPAR
+    6     | expr . PLUS expr
+    7     | expr . MINUS expr
+    8     | expr . MULT expr
+    9     | expr . DIV expr
+
+    PLUS      schiebe und gehe zu Zustand 11 über
+    MINUS     schiebe und gehe zu Zustand 12 über
+    MULT      schiebe und gehe zu Zustand 13 über
+    DIV       schiebe und gehe zu Zustand 14 über
+    CLOSEPAR  schiebe und gehe zu Zustand 15 über
+
+
+Zustand 10
+
+    0 $accept: start $end .
+
+    $default  annehmen
+
+
+Zustand 11
+
+    6 expr: expr PLUS . expr
+
+    IDENT      schiebe und gehe zu Zustand 1 über
+    STRINGLIT  schiebe und gehe zu Zustand 2 über
+    INTLIT     schiebe und gehe zu Zustand 3 über
+    MINUS      schiebe und gehe zu Zustand 4 über
+    OPENPAR    schiebe und gehe zu Zustand 5 über
+
+    expr  gehe zu Zustand 16 über
+
+
+Zustand 12
+
+    7 expr: expr MINUS . expr
+
+    IDENT      schiebe und gehe zu Zustand 1 über
+    STRINGLIT  schiebe und gehe zu Zustand 2 über
+    INTLIT     schiebe und gehe zu Zustand 3 über
+    MINUS      schiebe und gehe zu Zustand 4 über
+    OPENPAR    schiebe und gehe zu Zustand 5 über
+
+    expr  gehe zu Zustand 17 über
+
+
+Zustand 13
+
+    8 expr: expr MULT . expr
+
+    IDENT      schiebe und gehe zu Zustand 1 über
+    STRINGLIT  schiebe und gehe zu Zustand 2 über
+    INTLIT     schiebe und gehe zu Zustand 3 über
+    MINUS      schiebe und gehe zu Zustand 4 über
+    OPENPAR    schiebe und gehe zu Zustand 5 über
+
+    expr  gehe zu Zustand 18 über
+
+
+Zustand 14
+
+    9 expr: expr DIV . expr
+
+    IDENT      schiebe und gehe zu Zustand 1 über
+    STRINGLIT  schiebe und gehe zu Zustand 2 über
+    INTLIT     schiebe und gehe zu Zustand 3 über
+    MINUS      schiebe und gehe zu Zustand 4 über
+    OPENPAR    schiebe und gehe zu Zustand 5 über
+
+    expr  gehe zu Zustand 19 über
+
+
+Zustand 15
+
+    5 expr: OPENPAR expr CLOSEPAR .
+
+    $default  reduziere mit Regel 5 (expr)
+
+
+Zustand 16
+
+    6 expr: expr . PLUS expr
+    6     | expr PLUS expr .
+    7     | expr . MINUS expr
+    8     | expr . MULT expr
+    9     | expr . DIV expr
+
+    MULT  schiebe und gehe zu Zustand 13 über
+    DIV   schiebe und gehe zu Zustand 14 über
+
+    $default  reduziere mit Regel 6 (expr)
+
+
+Zustand 17
+
+    6 expr: expr . PLUS expr
+    7     | expr . MINUS expr
+    7     | expr MINUS expr .
+    8     | expr . MULT expr
+    9     | expr . DIV expr
+
+    MULT  schiebe und gehe zu Zustand 13 über
+    DIV   schiebe und gehe zu Zustand 14 über
+
+    $default  reduziere mit Regel 7 (expr)
+
+
+Zustand 18
+
+    6 expr: expr . PLUS expr
+    7     | expr . MINUS expr
+    8     | expr . MULT expr
+    8     | expr MULT expr .
+    9     | expr . DIV expr
+
+    $default  reduziere mit Regel 8 (expr)
+
+
+Zustand 19
+
+    6 expr: expr . PLUS expr
+    7     | expr . MINUS expr
+    8     | expr . MULT expr
+    9     | expr . DIV expr
+    9     | expr DIV expr .
+
+    $default  reduziere mit Regel 9 (expr)

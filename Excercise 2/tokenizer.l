@@ -11,7 +11,9 @@
 
 %{
 #include <string.h>
+#include "ast.h"
 #include "parser.tab.h"
+
 
 
 int yycol = 1;
@@ -22,7 +24,15 @@ void print_tok(int tok)
    printf("<%5d:%3d: %d=\"%s\">\n", yylineno, yycol-yyleng, tok, yytext);
 }
 */
-#define YY_USER_ACTION {yycol += yyleng;}
+#define YY_USER_ACTION {\
+  yylval=ASTEmptyAlloc();\
+  yylval->litval = strdup(yytext);\
+  \
+  yylloc.first_line = yylloc.last_line =yylineno;   \
+  yylloc.first_column = yycol; \
+  yycol += yyleng;\
+  yylloc.last_column = yycol-1; \
+}
 
 
 %}
@@ -115,6 +125,7 @@ STRINGLIT  \"[^"]*\"
 {IDENT} {
 
   coloumnCounter += yyleng;
+  yylval->type = t_IDENT;
   return IDENT;
 
 }
@@ -122,13 +133,16 @@ STRINGLIT  \"[^"]*\"
 {INTLIT} {
 
   coloumnCounter += yyleng;
+  yylval->type = t_INTLIT;
+  yylval->intval = atol(yytext);
   return INTLIT;
 }
 
 {STRINGLIT} {
 
   coloumnCounter += yyleng;
-  return INTLIT;
+  yylval->type = t_STRINGLIT;
+  return STRINGLIT;
 }
 
 
@@ -168,26 +182,17 @@ STRINGLIT  \"[^"]*\"
   return PLUS;
 }
 
-{PLUS} {
-
-  coloumnCounter += yyleng;
-  return PLUS;
-}
+{PLUS} {yylval->type = t_PLUS; return PLUS;}
 
 {MINUS} {
   coloumnCounter += yyleng;
+  yylval->type = t_MINUS;
   return MINUS;
 }
 
-{DIVIDE} {
-  coloumnCounter += yyleng;
-  return DIVIDE;
-}
+{DIVIDE} {yylval->type = t_DIV; return DIV;}
 
-{MULT} {
-  coloumnCounter += yyleng;
-  return MULT;
-}
+{MULT} {yylval->type = t_MULT; return MULT;}
 
 {COMPARE} {
   coloumnCounter += yyleng;
