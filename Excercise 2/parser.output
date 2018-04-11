@@ -5,118 +5,120 @@ Terminale, die in Grammatik unbenutzt sind
 
 Grammatik
 
-    0 $accept: prog $end
+    0 $accept: start $end
 
-    1 prog: %empty
-    2     | prog def
+    1 start: prog
 
-    3 def: vardef
-    4    | fundef
+    2 prog: %empty
+    3     | prog def
 
-    5 vardef: type idlist SEMI
+    4 def: vardef
+    5    | fundef
 
-    6 idlist: IDENT
-    7       | idlist COM IDENT
+    6 vardef: type idlist SEMICOLON
 
-    8 fundef: type IDENT OPENPAR params CLOSEPAR body
+    7 idlist: IDENT
+    8       | idlist COMMA IDENT
 
-    9 type: STRING
-   10     | INTEGER
+    9 fundef: type IDENT OPENPAR params CLOSEPAR body
 
-   11 params: %empty
-   12       | paramlist
+   10 type: STRING
+   11     | INTEGER
 
-   13 paramlist: param
-   14          | paramlist COM param
+   12 params: %empty
+   13       | paramlist
 
-   15 param: type IDENT
+   14 paramlist: param
+   15          | paramlist COMMA param
 
-   16 body: OPENCURLY vardefs stmts CLOSECURLY
+   16 param: type IDENT
 
-   17 vardefs: %empty
-   18        | vardefs vardef
+   17 body: OPENCURLY vardefs stmts CLOSECURLY
 
-   19 stmts: %empty
-   20      | stmts stmt
+   18 vardefs: %empty
+   19        | vardefs vardef
 
-   21 stmt: while_stmt
-   22     | if_stmt
-   23     | ret_stmt
-   24     | print_stmt
-   25     | assign
-   26     | funcall_stmt
+   20 stmts: %empty
+   21      | stmts stmt
 
-   27 while_stmt: WHILE OPENPAR boolexpr CLOSEPAR body
+   22 stmt: while_stmt
+   23     | if_stmt
+   24     | ret_stmt
+   25     | print_stmt
+   26     | assign
+   27     | funcall_stmt
 
-   28 if_stmt: IF OPENPAR boolexpr CLOSEPAR body
-   29        | IF OPENPAR boolexpr CLOSEPAR body ELSE body
+   28 while_stmt: WHILE OPENPAR boolexpr CLOSEPAR body
 
-   30 ret_stmt: RETURN expr SEMI
+   29 if_stmt: IF OPENPAR boolexpr CLOSEPAR body
+   30        | IF OPENPAR boolexpr CLOSEPAR body ELSE body
 
-   31 print_stmt: PRINT expr SEMI
+   31 ret_stmt: RETURN expr SEMICOLON
 
-   32 assign: IDENT COMPARE expr SEMI
+   32 print_stmt: PRINT expr SEMICOLON
 
-   33 funcall_stmt: funcall SEMI
+   33 assign: IDENT EQ expr SEMICOLON
 
-   34 boolexpr: expr COMPARE expr
-   35         | expr NEQ expr
-   36         | expr LT expr
-   37         | expr GT expr
-   38         | expr LEQ expr
-   39         | expr GEQ expr
+   34 funcall_stmt: funcall SEMICOLON
 
-   40 expr: funcall
-   41     | INTLIT
-   42     | IDENT
-   43     | STRINGLIT
-   44     | OPENPAR expr CLOSEPAR
-   45     | expr PLUS expr
-   46     | expr MINUS expr
-   47     | expr MULT expr
-   48     | expr DIVIDE expr
-   49     | MINUS expr
+   35 boolexpr: expr EQ expr
+   36         | expr NEQ expr
+   37         | expr LT expr
+   38         | expr GT expr
+   39         | expr LEQ expr
+   40         | expr GEQ expr
 
-   50 funcall: IDENT OPENPAR args CLOSEPAR
+   41 expr: funcall
+   42     | INTLIT
+   43     | IDENT
+   44     | STRINGLIT
+   45     | OPENPAR expr CLOSEPAR
+   46     | expr PLUS expr
+   47     | expr MINUS expr
+   48     | expr MULT expr
+   49     | expr DIV expr
+   50     | MINUS expr
 
-   51 args: %empty
-   52     | arglist
+   51 funcall: IDENT OPENPAR args CLOSEPAR
 
-   53 arglist: expr
-   54        | arglist COM expr
+   52 args: %empty
+   53     | arglist
+
+   54 arglist: expr
+   55        | arglist COMMA expr
 
 
 Terminale und die Regeln, in denen sie verwendet werden
 
 $end (0) 0
 error (256)
-IDENT (258) 6 7 8 15 32 42 50
-STRINGLIT (259) 43
-INTLIT (260) 41
-INTEGER (261) 10
-STRING (262) 9
-IF (263) 28 29
-WHILE (264) 27
-RETURN (265) 30
-PRINT (266) 31
-ELSE (267) 29
-COMPARE (268) 32 34
-NEQ (269) 35
-LT (270) 36
-GT (271) 37
-LEQ (272) 38
-GEQ (273) 39
-PLUS (274) 45
-MINUS (275) 46 49
-MULT (276) 47
-DIVIDE (277) 48
+IDENT (258) 7 8 9 16 33 43 51
+STRINGLIT (259) 44
+INTLIT (260) 42
+INTEGER (261) 11
+STRING (262) 10
+IF (263) 29 30
+WHILE (264) 28
+RETURN (265) 31
+PRINT (266) 32
+ELSE (267) 30
+EQ (268) 33 35
+NEQ (269) 36
+LT (270) 37
+GT (271) 38
+LEQ (272) 39
+GEQ (273) 40
+PLUS (274) 46
+MINUS (275) 47 50
+MULT (276) 48
+DIV (277) 49
 UMINUS (278)
-OPENPAR (279) 8 27 28 29 44 50
-CLOSEPAR (280) 8 27 28 29 44 50
-SEMI (281) 5 30 31 32 33
-COM (282) 7 14 54
-OPENCURLY (283) 16
-CLOSECURLY (284) 16
+OPENPAR (279) 9 28 29 30 45 51
+CLOSEPAR (280) 9 28 29 30 45 51
+SEMICOLON (281) 6 31 32 33 34
+COMMA (282) 8 15 55
+OPENCURLY (283) 17
+CLOSECURLY (284) 17
 ERROR (285)
 
 
@@ -124,1117 +126,1128 @@ Nicht-Terminal und die Regeln, in denen sie verwendet werden
 
 $accept (31)
     auf der linken Seite: 0
-prog (32)
-    auf der linken Seite: 1 2, auf der rechten Seite: 0 2
-def (33)
-    auf der linken Seite: 3 4, auf der rechten Seite: 2
-vardef (34)
-    auf der linken Seite: 5, auf der rechten Seite: 3 18
-idlist (35)
-    auf der linken Seite: 6 7, auf der rechten Seite: 5 7
-fundef (36)
-    auf der linken Seite: 8, auf der rechten Seite: 4
-type (37)
-    auf der linken Seite: 9 10, auf der rechten Seite: 5 8 15
-params (38)
-    auf der linken Seite: 11 12, auf der rechten Seite: 8
-paramlist (39)
-    auf der linken Seite: 13 14, auf der rechten Seite: 12 14
-param (40)
-    auf der linken Seite: 15, auf der rechten Seite: 13 14
-body (41)
-    auf der linken Seite: 16, auf der rechten Seite: 8 27 28 29
-vardefs (42)
-    auf der linken Seite: 17 18, auf der rechten Seite: 16 18
-stmts (43)
-    auf der linken Seite: 19 20, auf der rechten Seite: 16 20
-stmt (44)
-    auf der linken Seite: 21 22 23 24 25 26, auf der rechten Seite:
-    20
-while_stmt (45)
-    auf der linken Seite: 27, auf der rechten Seite: 21
-if_stmt (46)
-    auf der linken Seite: 28 29, auf der rechten Seite: 22
-ret_stmt (47)
-    auf der linken Seite: 30, auf der rechten Seite: 23
-print_stmt (48)
+start (32)
+    auf der linken Seite: 1, auf der rechten Seite: 0
+prog (33)
+    auf der linken Seite: 2 3, auf der rechten Seite: 1 3
+def (34)
+    auf der linken Seite: 4 5, auf der rechten Seite: 3
+vardef (35)
+    auf der linken Seite: 6, auf der rechten Seite: 4 19
+idlist (36)
+    auf der linken Seite: 7 8, auf der rechten Seite: 6 8
+fundef (37)
+    auf der linken Seite: 9, auf der rechten Seite: 5
+type (38)
+    auf der linken Seite: 10 11, auf der rechten Seite: 6 9 16
+params (39)
+    auf der linken Seite: 12 13, auf der rechten Seite: 9
+paramlist (40)
+    auf der linken Seite: 14 15, auf der rechten Seite: 13 15
+param (41)
+    auf der linken Seite: 16, auf der rechten Seite: 14 15
+body (42)
+    auf der linken Seite: 17, auf der rechten Seite: 9 28 29 30
+vardefs (43)
+    auf der linken Seite: 18 19, auf der rechten Seite: 17 19
+stmts (44)
+    auf der linken Seite: 20 21, auf der rechten Seite: 17 21
+stmt (45)
+    auf der linken Seite: 22 23 24 25 26 27, auf der rechten Seite:
+    21
+while_stmt (46)
+    auf der linken Seite: 28, auf der rechten Seite: 22
+if_stmt (47)
+    auf der linken Seite: 29 30, auf der rechten Seite: 23
+ret_stmt (48)
     auf der linken Seite: 31, auf der rechten Seite: 24
-assign (49)
+print_stmt (49)
     auf der linken Seite: 32, auf der rechten Seite: 25
-funcall_stmt (50)
+assign (50)
     auf der linken Seite: 33, auf der rechten Seite: 26
-boolexpr (51)
-    auf der linken Seite: 34 35 36 37 38 39, auf der rechten Seite:
-    27 28 29
-expr (52)
-    auf der linken Seite: 40 41 42 43 44 45 46 47 48 49, auf der rechten Seite:
-    30 31 32 34 35 36 37 38 39 44 45 46 47 48 49 53 54
-funcall (53)
-    auf der linken Seite: 50, auf der rechten Seite: 33 40
-args (54)
-    auf der linken Seite: 51 52, auf der rechten Seite: 50
-arglist (55)
-    auf der linken Seite: 53 54, auf der rechten Seite: 52 54
+funcall_stmt (51)
+    auf der linken Seite: 34, auf der rechten Seite: 27
+boolexpr (52)
+    auf der linken Seite: 35 36 37 38 39 40, auf der rechten Seite:
+    28 29 30
+expr (53)
+    auf der linken Seite: 41 42 43 44 45 46 47 48 49 50, auf der rechten Seite:
+    31 32 33 35 36 37 38 39 40 45 46 47 48 49 50 54 55
+funcall (54)
+    auf der linken Seite: 51, auf der rechten Seite: 34 41
+args (55)
+    auf der linken Seite: 52 53, auf der rechten Seite: 51
+arglist (56)
+    auf der linken Seite: 54 55, auf der rechten Seite: 53 55
 
 
 Zustand 0
 
-    0 $accept: . prog $end
+    0 $accept: . start $end
 
-    $default  reduziere mit Regel 1 (prog)
+    $default  reduziere mit Regel 2 (prog)
 
-    prog  gehe zu Zustand 1 über
+    start  gehe zu Zustand 1 über
+    prog   gehe zu Zustand 2 über
 
 
 Zustand 1
 
-    0 $accept: prog . $end
-    2 prog: prog . def
+    0 $accept: start . $end
 
-    $end     schiebe und gehe zu Zustand 2 über
-    INTEGER  schiebe und gehe zu Zustand 3 über
-    STRING   schiebe und gehe zu Zustand 4 über
-
-    def     gehe zu Zustand 5 über
-    vardef  gehe zu Zustand 6 über
-    fundef  gehe zu Zustand 7 über
-    type    gehe zu Zustand 8 über
+    $end  schiebe und gehe zu Zustand 3 über
 
 
 Zustand 2
 
-    0 $accept: prog $end .
+    1 start: prog .
+    3 prog: prog . def
 
-    $default  annehmen
+    INTEGER  schiebe und gehe zu Zustand 4 über
+    STRING   schiebe und gehe zu Zustand 5 über
+
+    $default  reduziere mit Regel 1 (start)
+
+    def     gehe zu Zustand 6 über
+    vardef  gehe zu Zustand 7 über
+    fundef  gehe zu Zustand 8 über
+    type    gehe zu Zustand 9 über
 
 
 Zustand 3
 
-   10 type: INTEGER .
+    0 $accept: start $end .
 
-    $default  reduziere mit Regel 10 (type)
+    $default  annehmen
 
 
 Zustand 4
 
-    9 type: STRING .
+   11 type: INTEGER .
 
-    $default  reduziere mit Regel 9 (type)
+    $default  reduziere mit Regel 11 (type)
 
 
 Zustand 5
 
-    2 prog: prog def .
+   10 type: STRING .
 
-    $default  reduziere mit Regel 2 (prog)
+    $default  reduziere mit Regel 10 (type)
 
 
 Zustand 6
 
-    3 def: vardef .
+    3 prog: prog def .
 
-    $default  reduziere mit Regel 3 (def)
+    $default  reduziere mit Regel 3 (prog)
 
 
 Zustand 7
 
-    4 def: fundef .
+    4 def: vardef .
 
     $default  reduziere mit Regel 4 (def)
 
 
 Zustand 8
 
-    5 vardef: type . idlist SEMI
-    8 fundef: type . IDENT OPENPAR params CLOSEPAR body
+    5 def: fundef .
 
-    IDENT  schiebe und gehe zu Zustand 9 über
-
-    idlist  gehe zu Zustand 10 über
+    $default  reduziere mit Regel 5 (def)
 
 
 Zustand 9
 
-    6 idlist: IDENT .
-    8 fundef: type IDENT . OPENPAR params CLOSEPAR body
+    6 vardef: type . idlist SEMICOLON
+    9 fundef: type . IDENT OPENPAR params CLOSEPAR body
 
-    OPENPAR  schiebe und gehe zu Zustand 11 über
+    IDENT  schiebe und gehe zu Zustand 10 über
 
-    $default  reduziere mit Regel 6 (idlist)
+    idlist  gehe zu Zustand 11 über
 
 
 Zustand 10
 
-    5 vardef: type idlist . SEMI
-    7 idlist: idlist . COM IDENT
+    7 idlist: IDENT .
+    9 fundef: type IDENT . OPENPAR params CLOSEPAR body
 
-    SEMI  schiebe und gehe zu Zustand 12 über
-    COM   schiebe und gehe zu Zustand 13 über
+    OPENPAR  schiebe und gehe zu Zustand 12 über
+
+    $default  reduziere mit Regel 7 (idlist)
 
 
 Zustand 11
 
-    8 fundef: type IDENT OPENPAR . params CLOSEPAR body
+    6 vardef: type idlist . SEMICOLON
+    8 idlist: idlist . COMMA IDENT
 
-    INTEGER  schiebe und gehe zu Zustand 3 über
-    STRING   schiebe und gehe zu Zustand 4 über
-
-    $default  reduziere mit Regel 11 (params)
-
-    type       gehe zu Zustand 14 über
-    params     gehe zu Zustand 15 über
-    paramlist  gehe zu Zustand 16 über
-    param      gehe zu Zustand 17 über
+    SEMICOLON  schiebe und gehe zu Zustand 13 über
+    COMMA      schiebe und gehe zu Zustand 14 über
 
 
 Zustand 12
 
-    5 vardef: type idlist SEMI .
+    9 fundef: type IDENT OPENPAR . params CLOSEPAR body
 
-    $default  reduziere mit Regel 5 (vardef)
+    INTEGER  schiebe und gehe zu Zustand 4 über
+    STRING   schiebe und gehe zu Zustand 5 über
+
+    $default  reduziere mit Regel 12 (params)
+
+    type       gehe zu Zustand 15 über
+    params     gehe zu Zustand 16 über
+    paramlist  gehe zu Zustand 17 über
+    param      gehe zu Zustand 18 über
 
 
 Zustand 13
 
-    7 idlist: idlist COM . IDENT
+    6 vardef: type idlist SEMICOLON .
 
-    IDENT  schiebe und gehe zu Zustand 18 über
+    $default  reduziere mit Regel 6 (vardef)
 
 
 Zustand 14
 
-   15 param: type . IDENT
+    8 idlist: idlist COMMA . IDENT
 
     IDENT  schiebe und gehe zu Zustand 19 über
 
 
 Zustand 15
 
-    8 fundef: type IDENT OPENPAR params . CLOSEPAR body
+   16 param: type . IDENT
 
-    CLOSEPAR  schiebe und gehe zu Zustand 20 über
+    IDENT  schiebe und gehe zu Zustand 20 über
 
 
 Zustand 16
 
-   12 params: paramlist .
-   14 paramlist: paramlist . COM param
+    9 fundef: type IDENT OPENPAR params . CLOSEPAR body
 
-    COM  schiebe und gehe zu Zustand 21 über
-
-    $default  reduziere mit Regel 12 (params)
+    CLOSEPAR  schiebe und gehe zu Zustand 21 über
 
 
 Zustand 17
 
-   13 paramlist: param .
+   13 params: paramlist .
+   15 paramlist: paramlist . COMMA param
 
-    $default  reduziere mit Regel 13 (paramlist)
+    COMMA  schiebe und gehe zu Zustand 22 über
+
+    $default  reduziere mit Regel 13 (params)
 
 
 Zustand 18
 
-    7 idlist: idlist COM IDENT .
-
-    $default  reduziere mit Regel 7 (idlist)
-
-
-Zustand 19
-
-   15 param: type IDENT .
-
-    $default  reduziere mit Regel 15 (param)
-
-
-Zustand 20
-
-    8 fundef: type IDENT OPENPAR params CLOSEPAR . body
-
-    OPENCURLY  schiebe und gehe zu Zustand 22 über
-
-    body  gehe zu Zustand 23 über
-
-
-Zustand 21
-
-   14 paramlist: paramlist COM . param
-
-    INTEGER  schiebe und gehe zu Zustand 3 über
-    STRING   schiebe und gehe zu Zustand 4 über
-
-    type   gehe zu Zustand 14 über
-    param  gehe zu Zustand 24 über
-
-
-Zustand 22
-
-   16 body: OPENCURLY . vardefs stmts CLOSECURLY
-
-    $default  reduziere mit Regel 17 (vardefs)
-
-    vardefs  gehe zu Zustand 25 über
-
-
-Zustand 23
-
-    8 fundef: type IDENT OPENPAR params CLOSEPAR body .
-
-    $default  reduziere mit Regel 8 (fundef)
-
-
-Zustand 24
-
-   14 paramlist: paramlist COM param .
+   14 paramlist: param .
 
     $default  reduziere mit Regel 14 (paramlist)
 
 
+Zustand 19
+
+    8 idlist: idlist COMMA IDENT .
+
+    $default  reduziere mit Regel 8 (idlist)
+
+
+Zustand 20
+
+   16 param: type IDENT .
+
+    $default  reduziere mit Regel 16 (param)
+
+
+Zustand 21
+
+    9 fundef: type IDENT OPENPAR params CLOSEPAR . body
+
+    OPENCURLY  schiebe und gehe zu Zustand 23 über
+
+    body  gehe zu Zustand 24 über
+
+
+Zustand 22
+
+   15 paramlist: paramlist COMMA . param
+
+    INTEGER  schiebe und gehe zu Zustand 4 über
+    STRING   schiebe und gehe zu Zustand 5 über
+
+    type   gehe zu Zustand 15 über
+    param  gehe zu Zustand 25 über
+
+
+Zustand 23
+
+   17 body: OPENCURLY . vardefs stmts CLOSECURLY
+
+    $default  reduziere mit Regel 18 (vardefs)
+
+    vardefs  gehe zu Zustand 26 über
+
+
+Zustand 24
+
+    9 fundef: type IDENT OPENPAR params CLOSEPAR body .
+
+    $default  reduziere mit Regel 9 (fundef)
+
+
 Zustand 25
 
-   16 body: OPENCURLY vardefs . stmts CLOSECURLY
-   18 vardefs: vardefs . vardef
+   15 paramlist: paramlist COMMA param .
 
-    INTEGER  schiebe und gehe zu Zustand 3 über
-    STRING   schiebe und gehe zu Zustand 4 über
-
-    $default  reduziere mit Regel 19 (stmts)
-
-    vardef  gehe zu Zustand 26 über
-    type    gehe zu Zustand 27 über
-    stmts   gehe zu Zustand 28 über
+    $default  reduziere mit Regel 15 (paramlist)
 
 
 Zustand 26
 
-   18 vardefs: vardefs vardef .
+   17 body: OPENCURLY vardefs . stmts CLOSECURLY
+   19 vardefs: vardefs . vardef
 
-    $default  reduziere mit Regel 18 (vardefs)
+    INTEGER  schiebe und gehe zu Zustand 4 über
+    STRING   schiebe und gehe zu Zustand 5 über
+
+    $default  reduziere mit Regel 20 (stmts)
+
+    vardef  gehe zu Zustand 27 über
+    type    gehe zu Zustand 28 über
+    stmts   gehe zu Zustand 29 über
 
 
 Zustand 27
 
-    5 vardef: type . idlist SEMI
+   19 vardefs: vardefs vardef .
 
-    IDENT  schiebe und gehe zu Zustand 29 über
-
-    idlist  gehe zu Zustand 10 über
+    $default  reduziere mit Regel 19 (vardefs)
 
 
 Zustand 28
 
-   16 body: OPENCURLY vardefs stmts . CLOSECURLY
-   20 stmts: stmts . stmt
+    6 vardef: type . idlist SEMICOLON
 
-    IDENT       schiebe und gehe zu Zustand 30 über
-    IF          schiebe und gehe zu Zustand 31 über
-    WHILE       schiebe und gehe zu Zustand 32 über
-    RETURN      schiebe und gehe zu Zustand 33 über
-    PRINT       schiebe und gehe zu Zustand 34 über
-    CLOSECURLY  schiebe und gehe zu Zustand 35 über
+    IDENT  schiebe und gehe zu Zustand 30 über
 
-    stmt          gehe zu Zustand 36 über
-    while_stmt    gehe zu Zustand 37 über
-    if_stmt       gehe zu Zustand 38 über
-    ret_stmt      gehe zu Zustand 39 über
-    print_stmt    gehe zu Zustand 40 über
-    assign        gehe zu Zustand 41 über
-    funcall_stmt  gehe zu Zustand 42 über
-    funcall       gehe zu Zustand 43 über
+    idlist  gehe zu Zustand 11 über
 
 
 Zustand 29
 
-    6 idlist: IDENT .
+   17 body: OPENCURLY vardefs stmts . CLOSECURLY
+   21 stmts: stmts . stmt
 
-    $default  reduziere mit Regel 6 (idlist)
+    IDENT       schiebe und gehe zu Zustand 31 über
+    IF          schiebe und gehe zu Zustand 32 über
+    WHILE       schiebe und gehe zu Zustand 33 über
+    RETURN      schiebe und gehe zu Zustand 34 über
+    PRINT       schiebe und gehe zu Zustand 35 über
+    CLOSECURLY  schiebe und gehe zu Zustand 36 über
+
+    stmt          gehe zu Zustand 37 über
+    while_stmt    gehe zu Zustand 38 über
+    if_stmt       gehe zu Zustand 39 über
+    ret_stmt      gehe zu Zustand 40 über
+    print_stmt    gehe zu Zustand 41 über
+    assign        gehe zu Zustand 42 über
+    funcall_stmt  gehe zu Zustand 43 über
+    funcall       gehe zu Zustand 44 über
 
 
 Zustand 30
 
-   32 assign: IDENT . COMPARE expr SEMI
-   50 funcall: IDENT . OPENPAR args CLOSEPAR
+    7 idlist: IDENT .
 
-    COMPARE  schiebe und gehe zu Zustand 44 über
-    OPENPAR  schiebe und gehe zu Zustand 45 über
+    $default  reduziere mit Regel 7 (idlist)
 
 
 Zustand 31
 
-   28 if_stmt: IF . OPENPAR boolexpr CLOSEPAR body
-   29        | IF . OPENPAR boolexpr CLOSEPAR body ELSE body
+   33 assign: IDENT . EQ expr SEMICOLON
+   51 funcall: IDENT . OPENPAR args CLOSEPAR
 
+    EQ       schiebe und gehe zu Zustand 45 über
     OPENPAR  schiebe und gehe zu Zustand 46 über
 
 
 Zustand 32
 
-   27 while_stmt: WHILE . OPENPAR boolexpr CLOSEPAR body
+   29 if_stmt: IF . OPENPAR boolexpr CLOSEPAR body
+   30        | IF . OPENPAR boolexpr CLOSEPAR body ELSE body
 
     OPENPAR  schiebe und gehe zu Zustand 47 über
 
 
 Zustand 33
 
-   30 ret_stmt: RETURN . expr SEMI
+   28 while_stmt: WHILE . OPENPAR boolexpr CLOSEPAR body
 
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 53 über
-    funcall  gehe zu Zustand 54 über
+    OPENPAR  schiebe und gehe zu Zustand 48 über
 
 
 Zustand 34
 
-   31 print_stmt: PRINT . expr SEMI
+   31 ret_stmt: RETURN . expr SEMICOLON
 
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
 
-    expr     gehe zu Zustand 55 über
-    funcall  gehe zu Zustand 54 über
+    expr     gehe zu Zustand 54 über
+    funcall  gehe zu Zustand 55 über
 
 
 Zustand 35
 
-   16 body: OPENCURLY vardefs stmts CLOSECURLY .
+   32 print_stmt: PRINT . expr SEMICOLON
 
-    $default  reduziere mit Regel 16 (body)
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 56 über
+    funcall  gehe zu Zustand 55 über
 
 
 Zustand 36
 
-   20 stmts: stmts stmt .
+   17 body: OPENCURLY vardefs stmts CLOSECURLY .
 
-    $default  reduziere mit Regel 20 (stmts)
+    $default  reduziere mit Regel 17 (body)
 
 
 Zustand 37
 
-   21 stmt: while_stmt .
+   21 stmts: stmts stmt .
 
-    $default  reduziere mit Regel 21 (stmt)
+    $default  reduziere mit Regel 21 (stmts)
 
 
 Zustand 38
 
-   22 stmt: if_stmt .
+   22 stmt: while_stmt .
 
     $default  reduziere mit Regel 22 (stmt)
 
 
 Zustand 39
 
-   23 stmt: ret_stmt .
+   23 stmt: if_stmt .
 
     $default  reduziere mit Regel 23 (stmt)
 
 
 Zustand 40
 
-   24 stmt: print_stmt .
+   24 stmt: ret_stmt .
 
     $default  reduziere mit Regel 24 (stmt)
 
 
 Zustand 41
 
-   25 stmt: assign .
+   25 stmt: print_stmt .
 
     $default  reduziere mit Regel 25 (stmt)
 
 
 Zustand 42
 
-   26 stmt: funcall_stmt .
+   26 stmt: assign .
 
     $default  reduziere mit Regel 26 (stmt)
 
 
 Zustand 43
 
-   33 funcall_stmt: funcall . SEMI
+   27 stmt: funcall_stmt .
 
-    SEMI  schiebe und gehe zu Zustand 56 über
+    $default  reduziere mit Regel 27 (stmt)
 
 
 Zustand 44
 
-   32 assign: IDENT COMPARE . expr SEMI
+   34 funcall_stmt: funcall . SEMICOLON
 
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 57 über
-    funcall  gehe zu Zustand 54 über
+    SEMICOLON  schiebe und gehe zu Zustand 57 über
 
 
 Zustand 45
 
-   50 funcall: IDENT OPENPAR . args CLOSEPAR
+   33 assign: IDENT EQ . expr SEMICOLON
 
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    $default  reduziere mit Regel 51 (args)
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
 
     expr     gehe zu Zustand 58 über
-    funcall  gehe zu Zustand 54 über
-    args     gehe zu Zustand 59 über
-    arglist  gehe zu Zustand 60 über
+    funcall  gehe zu Zustand 55 über
 
 
 Zustand 46
 
-   28 if_stmt: IF OPENPAR . boolexpr CLOSEPAR body
-   29        | IF OPENPAR . boolexpr CLOSEPAR body ELSE body
+   51 funcall: IDENT OPENPAR . args CLOSEPAR
 
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
 
-    boolexpr  gehe zu Zustand 61 über
-    expr      gehe zu Zustand 62 über
-    funcall   gehe zu Zustand 54 über
+    $default  reduziere mit Regel 52 (args)
+
+    expr     gehe zu Zustand 59 über
+    funcall  gehe zu Zustand 55 über
+    args     gehe zu Zustand 60 über
+    arglist  gehe zu Zustand 61 über
 
 
 Zustand 47
 
-   27 while_stmt: WHILE OPENPAR . boolexpr CLOSEPAR body
+   29 if_stmt: IF OPENPAR . boolexpr CLOSEPAR body
+   30        | IF OPENPAR . boolexpr CLOSEPAR body ELSE body
 
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
 
-    boolexpr  gehe zu Zustand 63 über
-    expr      gehe zu Zustand 62 über
-    funcall   gehe zu Zustand 54 über
+    boolexpr  gehe zu Zustand 62 über
+    expr      gehe zu Zustand 63 über
+    funcall   gehe zu Zustand 55 über
 
 
 Zustand 48
 
-   42 expr: IDENT .
-   50 funcall: IDENT . OPENPAR args CLOSEPAR
+   28 while_stmt: WHILE OPENPAR . boolexpr CLOSEPAR body
 
-    OPENPAR  schiebe und gehe zu Zustand 45 über
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
 
-    $default  reduziere mit Regel 42 (expr)
+    boolexpr  gehe zu Zustand 64 über
+    expr      gehe zu Zustand 63 über
+    funcall   gehe zu Zustand 55 über
 
 
 Zustand 49
 
-   43 expr: STRINGLIT .
+   43 expr: IDENT .
+   51 funcall: IDENT . OPENPAR args CLOSEPAR
+
+    OPENPAR  schiebe und gehe zu Zustand 46 über
 
     $default  reduziere mit Regel 43 (expr)
 
 
 Zustand 50
 
-   41 expr: INTLIT .
-
-    $default  reduziere mit Regel 41 (expr)
-
-
-Zustand 51
-
-   49 expr: MINUS . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 64 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 52
-
-   44 expr: OPENPAR . expr CLOSEPAR
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 65 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 53
-
-   30 ret_stmt: RETURN expr . SEMI
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
-    SEMI    schiebe und gehe zu Zustand 70 über
-
-
-Zustand 54
-
-   40 expr: funcall .
-
-    $default  reduziere mit Regel 40 (expr)
-
-
-Zustand 55
-
-   31 print_stmt: PRINT expr . SEMI
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
-    SEMI    schiebe und gehe zu Zustand 71 über
-
-
-Zustand 56
-
-   33 funcall_stmt: funcall SEMI .
-
-    $default  reduziere mit Regel 33 (funcall_stmt)
-
-
-Zustand 57
-
-   32 assign: IDENT COMPARE expr . SEMI
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
-    SEMI    schiebe und gehe zu Zustand 72 über
-
-
-Zustand 58
-
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-   53 arglist: expr .
-
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
-
-    $default  reduziere mit Regel 53 (arglist)
-
-
-Zustand 59
-
-   50 funcall: IDENT OPENPAR args . CLOSEPAR
-
-    CLOSEPAR  schiebe und gehe zu Zustand 73 über
-
-
-Zustand 60
-
-   52 args: arglist .
-   54 arglist: arglist . COM expr
-
-    COM  schiebe und gehe zu Zustand 74 über
-
-    $default  reduziere mit Regel 52 (args)
-
-
-Zustand 61
-
-   28 if_stmt: IF OPENPAR boolexpr . CLOSEPAR body
-   29        | IF OPENPAR boolexpr . CLOSEPAR body ELSE body
-
-    CLOSEPAR  schiebe und gehe zu Zustand 75 über
-
-
-Zustand 62
-
-   34 boolexpr: expr . COMPARE expr
-   35         | expr . NEQ expr
-   36         | expr . LT expr
-   37         | expr . GT expr
-   38         | expr . LEQ expr
-   39         | expr . GEQ expr
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-
-    COMPARE  schiebe und gehe zu Zustand 76 über
-    NEQ      schiebe und gehe zu Zustand 77 über
-    LT       schiebe und gehe zu Zustand 78 über
-    GT       schiebe und gehe zu Zustand 79 über
-    LEQ      schiebe und gehe zu Zustand 80 über
-    GEQ      schiebe und gehe zu Zustand 81 über
-    PLUS     schiebe und gehe zu Zustand 66 über
-    MINUS    schiebe und gehe zu Zustand 67 über
-    MULT     schiebe und gehe zu Zustand 68 über
-    DIVIDE   schiebe und gehe zu Zustand 69 über
-
-
-Zustand 63
-
-   27 while_stmt: WHILE OPENPAR boolexpr . CLOSEPAR body
-
-    CLOSEPAR  schiebe und gehe zu Zustand 82 über
-
-
-Zustand 64
-
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-   49     | MINUS expr .
-
-    $default  reduziere mit Regel 49 (expr)
-
-
-Zustand 65
-
-   44 expr: OPENPAR expr . CLOSEPAR
-   45     | expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-
-    PLUS      schiebe und gehe zu Zustand 66 über
-    MINUS     schiebe und gehe zu Zustand 67 über
-    MULT      schiebe und gehe zu Zustand 68 über
-    DIVIDE    schiebe und gehe zu Zustand 69 über
-    CLOSEPAR  schiebe und gehe zu Zustand 83 über
-
-
-Zustand 66
-
-   45 expr: expr PLUS . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 84 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 67
-
-   46 expr: expr MINUS . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 85 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 68
-
-   47 expr: expr MULT . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 86 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 69
-
-   48 expr: expr DIVIDE . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 87 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 70
-
-   30 ret_stmt: RETURN expr SEMI .
-
-    $default  reduziere mit Regel 30 (ret_stmt)
-
-
-Zustand 71
-
-   31 print_stmt: PRINT expr SEMI .
-
-    $default  reduziere mit Regel 31 (print_stmt)
-
-
-Zustand 72
-
-   32 assign: IDENT COMPARE expr SEMI .
-
-    $default  reduziere mit Regel 32 (assign)
-
-
-Zustand 73
-
-   50 funcall: IDENT OPENPAR args CLOSEPAR .
-
-    $default  reduziere mit Regel 50 (funcall)
-
-
-Zustand 74
-
-   54 arglist: arglist COM . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 88 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 75
-
-   28 if_stmt: IF OPENPAR boolexpr CLOSEPAR . body
-   29        | IF OPENPAR boolexpr CLOSEPAR . body ELSE body
-
-    OPENCURLY  schiebe und gehe zu Zustand 22 über
-
-    body  gehe zu Zustand 89 über
-
-
-Zustand 76
-
-   34 boolexpr: expr COMPARE . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 90 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 77
-
-   35 boolexpr: expr NEQ . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 91 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 78
-
-   36 boolexpr: expr LT . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 92 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 79
-
-   37 boolexpr: expr GT . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 93 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 80
-
-   38 boolexpr: expr LEQ . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 94 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 81
-
-   39 boolexpr: expr GEQ . expr
-
-    IDENT      schiebe und gehe zu Zustand 48 über
-    STRINGLIT  schiebe und gehe zu Zustand 49 über
-    INTLIT     schiebe und gehe zu Zustand 50 über
-    MINUS      schiebe und gehe zu Zustand 51 über
-    OPENPAR    schiebe und gehe zu Zustand 52 über
-
-    expr     gehe zu Zustand 95 über
-    funcall  gehe zu Zustand 54 über
-
-
-Zustand 82
-
-   27 while_stmt: WHILE OPENPAR boolexpr CLOSEPAR . body
-
-    OPENCURLY  schiebe und gehe zu Zustand 22 über
-
-    body  gehe zu Zustand 96 über
-
-
-Zustand 83
-
-   44 expr: OPENPAR expr CLOSEPAR .
+   44 expr: STRINGLIT .
 
     $default  reduziere mit Regel 44 (expr)
 
 
+Zustand 51
+
+   42 expr: INTLIT .
+
+    $default  reduziere mit Regel 42 (expr)
+
+
+Zustand 52
+
+   50 expr: MINUS . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 65 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 53
+
+   45 expr: OPENPAR . expr CLOSEPAR
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 66 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 54
+
+   31 ret_stmt: RETURN expr . SEMICOLON
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+
+    PLUS       schiebe und gehe zu Zustand 67 über
+    MINUS      schiebe und gehe zu Zustand 68 über
+    MULT       schiebe und gehe zu Zustand 69 über
+    DIV        schiebe und gehe zu Zustand 70 über
+    SEMICOLON  schiebe und gehe zu Zustand 71 über
+
+
+Zustand 55
+
+   41 expr: funcall .
+
+    $default  reduziere mit Regel 41 (expr)
+
+
+Zustand 56
+
+   32 print_stmt: PRINT expr . SEMICOLON
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+
+    PLUS       schiebe und gehe zu Zustand 67 über
+    MINUS      schiebe und gehe zu Zustand 68 über
+    MULT       schiebe und gehe zu Zustand 69 über
+    DIV        schiebe und gehe zu Zustand 70 über
+    SEMICOLON  schiebe und gehe zu Zustand 72 über
+
+
+Zustand 57
+
+   34 funcall_stmt: funcall SEMICOLON .
+
+    $default  reduziere mit Regel 34 (funcall_stmt)
+
+
+Zustand 58
+
+   33 assign: IDENT EQ expr . SEMICOLON
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+
+    PLUS       schiebe und gehe zu Zustand 67 über
+    MINUS      schiebe und gehe zu Zustand 68 über
+    MULT       schiebe und gehe zu Zustand 69 über
+    DIV        schiebe und gehe zu Zustand 70 über
+    SEMICOLON  schiebe und gehe zu Zustand 73 über
+
+
+Zustand 59
+
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+   54 arglist: expr .
+
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
+
+    $default  reduziere mit Regel 54 (arglist)
+
+
+Zustand 60
+
+   51 funcall: IDENT OPENPAR args . CLOSEPAR
+
+    CLOSEPAR  schiebe und gehe zu Zustand 74 über
+
+
+Zustand 61
+
+   53 args: arglist .
+   55 arglist: arglist . COMMA expr
+
+    COMMA  schiebe und gehe zu Zustand 75 über
+
+    $default  reduziere mit Regel 53 (args)
+
+
+Zustand 62
+
+   29 if_stmt: IF OPENPAR boolexpr . CLOSEPAR body
+   30        | IF OPENPAR boolexpr . CLOSEPAR body ELSE body
+
+    CLOSEPAR  schiebe und gehe zu Zustand 76 über
+
+
+Zustand 63
+
+   35 boolexpr: expr . EQ expr
+   36         | expr . NEQ expr
+   37         | expr . LT expr
+   38         | expr . GT expr
+   39         | expr . LEQ expr
+   40         | expr . GEQ expr
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+
+    EQ     schiebe und gehe zu Zustand 77 über
+    NEQ    schiebe und gehe zu Zustand 78 über
+    LT     schiebe und gehe zu Zustand 79 über
+    GT     schiebe und gehe zu Zustand 80 über
+    LEQ    schiebe und gehe zu Zustand 81 über
+    GEQ    schiebe und gehe zu Zustand 82 über
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
+
+
+Zustand 64
+
+   28 while_stmt: WHILE OPENPAR boolexpr . CLOSEPAR body
+
+    CLOSEPAR  schiebe und gehe zu Zustand 83 über
+
+
+Zustand 65
+
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+   50     | MINUS expr .
+
+    $default  reduziere mit Regel 50 (expr)
+
+
+Zustand 66
+
+   45 expr: OPENPAR expr . CLOSEPAR
+   46     | expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+
+    PLUS      schiebe und gehe zu Zustand 67 über
+    MINUS     schiebe und gehe zu Zustand 68 über
+    MULT      schiebe und gehe zu Zustand 69 über
+    DIV       schiebe und gehe zu Zustand 70 über
+    CLOSEPAR  schiebe und gehe zu Zustand 84 über
+
+
+Zustand 67
+
+   46 expr: expr PLUS . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 85 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 68
+
+   47 expr: expr MINUS . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 86 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 69
+
+   48 expr: expr MULT . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 87 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 70
+
+   49 expr: expr DIV . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 88 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 71
+
+   31 ret_stmt: RETURN expr SEMICOLON .
+
+    $default  reduziere mit Regel 31 (ret_stmt)
+
+
+Zustand 72
+
+   32 print_stmt: PRINT expr SEMICOLON .
+
+    $default  reduziere mit Regel 32 (print_stmt)
+
+
+Zustand 73
+
+   33 assign: IDENT EQ expr SEMICOLON .
+
+    $default  reduziere mit Regel 33 (assign)
+
+
+Zustand 74
+
+   51 funcall: IDENT OPENPAR args CLOSEPAR .
+
+    $default  reduziere mit Regel 51 (funcall)
+
+
+Zustand 75
+
+   55 arglist: arglist COMMA . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 89 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 76
+
+   29 if_stmt: IF OPENPAR boolexpr CLOSEPAR . body
+   30        | IF OPENPAR boolexpr CLOSEPAR . body ELSE body
+
+    OPENCURLY  schiebe und gehe zu Zustand 23 über
+
+    body  gehe zu Zustand 90 über
+
+
+Zustand 77
+
+   35 boolexpr: expr EQ . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 91 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 78
+
+   36 boolexpr: expr NEQ . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 92 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 79
+
+   37 boolexpr: expr LT . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 93 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 80
+
+   38 boolexpr: expr GT . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 94 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 81
+
+   39 boolexpr: expr LEQ . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 95 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 82
+
+   40 boolexpr: expr GEQ . expr
+
+    IDENT      schiebe und gehe zu Zustand 49 über
+    STRINGLIT  schiebe und gehe zu Zustand 50 über
+    INTLIT     schiebe und gehe zu Zustand 51 über
+    MINUS      schiebe und gehe zu Zustand 52 über
+    OPENPAR    schiebe und gehe zu Zustand 53 über
+
+    expr     gehe zu Zustand 96 über
+    funcall  gehe zu Zustand 55 über
+
+
+Zustand 83
+
+   28 while_stmt: WHILE OPENPAR boolexpr CLOSEPAR . body
+
+    OPENCURLY  schiebe und gehe zu Zustand 23 über
+
+    body  gehe zu Zustand 97 über
+
+
 Zustand 84
 
-   45 expr: expr . PLUS expr
-   45     | expr PLUS expr .
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
+   45 expr: OPENPAR expr CLOSEPAR .
 
     $default  reduziere mit Regel 45 (expr)
 
 
 Zustand 85
 
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   46     | expr MINUS expr .
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
+   46 expr: expr . PLUS expr
+   46     | expr PLUS expr .
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
 
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
+    MULT  schiebe und gehe zu Zustand 69 über
+    DIV   schiebe und gehe zu Zustand 70 über
 
     $default  reduziere mit Regel 46 (expr)
 
 
 Zustand 86
 
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   47     | expr MULT expr .
-   48     | expr . DIVIDE expr
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   47     | expr MINUS expr .
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+
+    MULT  schiebe und gehe zu Zustand 69 über
+    DIV   schiebe und gehe zu Zustand 70 über
 
     $default  reduziere mit Regel 47 (expr)
 
 
 Zustand 87
 
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-   48     | expr DIVIDE expr .
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   48     | expr MULT expr .
+   49     | expr . DIV expr
 
     $default  reduziere mit Regel 48 (expr)
 
 
 Zustand 88
 
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
-   54 arglist: arglist COM expr .
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+   49     | expr DIV expr .
 
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
-
-    $default  reduziere mit Regel 54 (arglist)
+    $default  reduziere mit Regel 49 (expr)
 
 
 Zustand 89
 
-   28 if_stmt: IF OPENPAR boolexpr CLOSEPAR body .
-   29        | IF OPENPAR boolexpr CLOSEPAR body . ELSE body
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
+   55 arglist: arglist COMMA expr .
 
-    ELSE  schiebe und gehe zu Zustand 97 über
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
 
-    $default  reduziere mit Regel 28 (if_stmt)
+    $default  reduziere mit Regel 55 (arglist)
 
 
 Zustand 90
 
-   34 boolexpr: expr COMPARE expr .
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
+   29 if_stmt: IF OPENPAR boolexpr CLOSEPAR body .
+   30        | IF OPENPAR boolexpr CLOSEPAR body . ELSE body
 
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
+    ELSE  schiebe und gehe zu Zustand 98 über
 
-    $default  reduziere mit Regel 34 (boolexpr)
+    $default  reduziere mit Regel 29 (if_stmt)
 
 
 Zustand 91
 
-   35 boolexpr: expr NEQ expr .
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
+   35 boolexpr: expr EQ expr .
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
 
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
 
     $default  reduziere mit Regel 35 (boolexpr)
 
 
 Zustand 92
 
-   36 boolexpr: expr LT expr .
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
+   36 boolexpr: expr NEQ expr .
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
 
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
 
     $default  reduziere mit Regel 36 (boolexpr)
 
 
 Zustand 93
 
-   37 boolexpr: expr GT expr .
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
+   37 boolexpr: expr LT expr .
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
 
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
 
     $default  reduziere mit Regel 37 (boolexpr)
 
 
 Zustand 94
 
-   38 boolexpr: expr LEQ expr .
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
+   38 boolexpr: expr GT expr .
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
 
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
 
     $default  reduziere mit Regel 38 (boolexpr)
 
 
 Zustand 95
 
-   39 boolexpr: expr GEQ expr .
-   45 expr: expr . PLUS expr
-   46     | expr . MINUS expr
-   47     | expr . MULT expr
-   48     | expr . DIVIDE expr
+   39 boolexpr: expr LEQ expr .
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
 
-    PLUS    schiebe und gehe zu Zustand 66 über
-    MINUS   schiebe und gehe zu Zustand 67 über
-    MULT    schiebe und gehe zu Zustand 68 über
-    DIVIDE  schiebe und gehe zu Zustand 69 über
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
 
     $default  reduziere mit Regel 39 (boolexpr)
 
 
 Zustand 96
 
-   27 while_stmt: WHILE OPENPAR boolexpr CLOSEPAR body .
+   40 boolexpr: expr GEQ expr .
+   46 expr: expr . PLUS expr
+   47     | expr . MINUS expr
+   48     | expr . MULT expr
+   49     | expr . DIV expr
 
-    $default  reduziere mit Regel 27 (while_stmt)
+    PLUS   schiebe und gehe zu Zustand 67 über
+    MINUS  schiebe und gehe zu Zustand 68 über
+    MULT   schiebe und gehe zu Zustand 69 über
+    DIV    schiebe und gehe zu Zustand 70 über
+
+    $default  reduziere mit Regel 40 (boolexpr)
 
 
 Zustand 97
 
-   29 if_stmt: IF OPENPAR boolexpr CLOSEPAR body ELSE . body
+   28 while_stmt: WHILE OPENPAR boolexpr CLOSEPAR body .
 
-    OPENCURLY  schiebe und gehe zu Zustand 22 über
-
-    body  gehe zu Zustand 98 über
+    $default  reduziere mit Regel 28 (while_stmt)
 
 
 Zustand 98
 
-   29 if_stmt: IF OPENPAR boolexpr CLOSEPAR body ELSE body .
+   30 if_stmt: IF OPENPAR boolexpr CLOSEPAR body ELSE . body
 
-    $default  reduziere mit Regel 29 (if_stmt)
+    OPENCURLY  schiebe und gehe zu Zustand 23 über
+
+    body  gehe zu Zustand 99 über
+
+
+Zustand 99
+
+   30 if_stmt: IF OPENPAR boolexpr CLOSEPAR body ELSE body .
+
+    $default  reduziere mit Regel 30 (if_stmt)

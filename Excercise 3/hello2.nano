@@ -1,8 +1,5 @@
-
-
 Integer main()
 {
    print "Hello World\n";
-   a = 10;
    return  0;
 }

@@ -1,241 +1,105 @@
-/* Find and add all integers and floats... */
-
 %option noyywrap
-
 %option yylineno
 
 %{
- int rowCounter = 1;
- int coloumnCounter = 1;
-%}
+   #include <string.h>
+   #include "ast.h"
+   #include "nanoparser.tab.h"
 
-%{
-#include <string.h>
-#include "ast.h"
-#include "parser.tab.h"
+   int yycol = 1;
 
-
-
-int yycol = 1;
-
-/*
-void print_tok(int tok)
-{
-   printf("<%5d:%3d: %d=\"%s\">\n", yylineno, yycol-yyleng, tok, yytext);
-}
-*/
 #define YY_USER_ACTION {\
-  yylval=ASTEmptyAlloc();\
-  yylval->litval = strdup(yytext);\
-  \
-  yylloc.first_line = yylloc.last_line =yylineno;   \
-  yylloc.first_column = yycol; \
-  yycol += yyleng;\
-  yylloc.last_column = yycol-1; \
-}
-
+      yylval=ASTEmptyAlloc();\
+      yylval->litval = strdup(yytext);\
+      \
+      yylloc.first_line = yylloc.last_line =yylineno;   \
+      yylloc.first_column = yycol; \
+      yycol += yyleng;\
+      yylloc.last_column = yycol-1; \
+   }
 
 %}
+
 
 DIGIT      [0-9]
+ALPHA      [a-zA-Z]
+ALNUM      {ALPHA}|{DIGIT}
+
 INT        {DIGIT}+
-EXP        [eE](\+|-)?{INT}
-REG        R{DIGIT}{DIGIT}?
-CHAR       [a-zA-Z]
-OPENPAR    "("
-CLOSEPAR   ")"
-OPENCURLY  "{"
-CLOSECURLY "}"
-PLUS       "+"
-MINUS      "-"
-DIVIDE     "/"
-MULT       "*"
-COMPARE    "="
-GT         ">"
-LT         "<"
-NEQ        "!="
-GEQ        ">="
-LEQ        "<="
-COM        ","
-SEMI       ";"
-SPACE      [ ]
-NEWLINE    \n
-IF         "if"
-ELSE       "else"
-WHILE      "while"
-RETURN     "return"
-PRINT      "print"
-INTEGER    "Integer"
-STRING     "String"
-
-IDENT      [A-Za-z]([A-Za-z0-9])*
-INTLIT     [0-9]+
-STRINGLIT  \"[^"]*\"
+ID         {ALPHA}{ALNUM}*
 
 
 %%
 
-
-#[^\n]* {
-
-}
-
-{INTEGER} {
-
-  coloumnCounter += yyleng;
-  return INTEGER;
-}
-
-{STRING} {
-
-  coloumnCounter += yyleng;
-  return STRING;
-}
-
-{PRINT} {
-
-  coloumnCounter += yyleng;
-  return PRINT;
-}
-
-{RETURN} {
-
-  coloumnCounter += yyleng;
-  return RETURN;
-}
-
-{WHILE} {
-
-  coloumnCounter += yyleng;
-  return WHILE;
-}
-
-{ELSE} {
-
-  coloumnCounter += yyleng;
-  return ELSE;
-}
-
-{IF} {
-
-  coloumnCounter += yyleng;
-  return IF;
-}
-
-{IDENT} {
-
-  coloumnCounter += yyleng;
-  yylval->type = t_IDENT;
-  return IDENT;
-
-}
-
-{INTLIT} {
-
-  coloumnCounter += yyleng;
-  yylval->type = t_INTLIT;
-  yylval->intval = atol(yytext);
-  return INTLIT;
-}
-
-{STRINGLIT} {
-
-  coloumnCounter += yyleng;
-  yylval->type = t_STRINGLIT;
-  return STRINGLIT;
-}
+"("  {return OPENPAR;}
+")"  {return CLOSEPAR;}
+"*"  {yylval->type = t_MULT; return MULT;}
+"/"  {yylval->type = t_DIV; return DIV;}
+"+"  {yylval->type = t_PLUS; return PLUS;}
+"-"  {yylval->type = t_MINUS; return MINUS;}
+"="  {yylval->type = t_EQ;return EQ;}
+"!=" {yylval->type = t_NEQ;return NEQ;}
+">"  {yylval->type = t_GT;return GT;}
+"<"  {yylval->type = t_LT;return LT;}
+">=" {yylval->type = t_GEQ;return GEQ;}
+"<=" {yylval->type = t_LEQ;return LEQ;}
+"{"  {return OPENCURLY;}
+"}"  {return CLOSECURLY;}
+";"  {return SEMICOLON;}
+","  {return COMA;}
 
 
-{OPENPAR} {
+Integer {yylval->type = t_INTEGER;return INTEGER;}
+String  {yylval->type = t_STRING;return STRING;}
+if      {return IF;}
+while   {return WHILE;}
+return  {return RETURN;}
+print   {return PRINT;}
 
-  coloumnCounter += yyleng;
-  return OPENPAR;
-}
+{ALPHA}{ALNUM}* {yylval->type = t_IDENT;return IDENT;}
 
-{CLOSEPAR} {
-
-  coloumnCounter += yyleng;
-  return CLOSEPAR;
-}
-
-{OPENCURLY} {
-
-  coloumnCounter += yyleng;
-  return OPENCURLY;
-}
-
-{CLOSECURLY} {
-
-  coloumnCounter += yyleng;
-  return CLOSECURLY;
-}
-
-{LEQ} {
-
-  coloumnCounter += yyleng;
-  return LEQ;
-}
-
-{GEQ} {
-
-  coloumnCounter += yyleng;
-  return PLUS;
-}
-
-{PLUS} {yylval->type = t_PLUS; return PLUS;}
-
-{MINUS} {
-  coloumnCounter += yyleng;
-  yylval->type = t_MINUS;
-  return MINUS;
-}
-
-{DIVIDE} {yylval->type = t_DIV; return DIV;}
-
-{MULT} {yylval->type = t_MULT; return MULT;}
-
-{COMPARE} {
-  coloumnCounter += yyleng;
-  return COMPARE;
-}
-
-{GT} {
-  coloumnCounter += yyleng;
-  return GT;
-}
-
-{LT} {
-  coloumnCounter += yyleng;
-  return LT;
-}
-
-{NEQ} {
-  coloumnCounter += yyleng;
-  return NEQ;
-}
-
-{COM} {
-  coloumnCounter += yyleng;
-  return COM;
-}
-
-{SEMI} {
-  coloumnCounter += yyleng;
-  return SEMI;
-}
-
-{SPACE} {
-  coloumnCounter++;
-}
-
-{NEWLINE} {
-  yycol = 1;
-}
-
-
-
-. {
-    coloumnCounter++;
-      /* Skip */
-    }
+\"[^"]*\"       {yylval-> type = t_STRINGLIT;return STRINGLIT;}
+{DIGIT}+        {yylval->type = t_INTLIT;return INTLIT;}
+#[^\n]* { /* Eat comments */;}
+[\n]    {yycol = 0;}
+[\r\t ] {/* Skip  whitespace*/ }
+ /* Everything else is an invalid character. */
+.   {return ERROR;}
 %%
+/*---------------------------------------------------------------------*/
+/*                        Global Variables                             */
+/*---------------------------------------------------------------------*/
+/* Names of the tokens for nice output. */
+char* tokname[] =
+{
+   "End Of File",
+   "OPENPAR",
+   "CLOSEPAR",
+   "MULT",
+   "DIV",
+   "PLUS",
+   "MINUS",
+   "EQ",
+   "NEQ",
+   "LT",
+   "GT",
+   "LEQ",
+   "GEQ",
+   "OPENCURLY",
+   "CLOSECURLY",
+   "SEMICOLON",
+   "COMA",
+   "IDENT",
+   "STRINGLIT",
+   "INTLIT",
+   "INTEGER",
+   "STRING",
+   "IF",
+   "WHILE",
+   "RETURN",
+   "PRINT",
+   "ERROR"
+};
+/* yylval is the semantic value, used by the parser, but set by the
+ * lexer. The variable is provided by the parser side. */
+YYSTYPE yylval;

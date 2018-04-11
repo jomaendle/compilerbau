@@ -1,0 +1,28 @@
+# This simple function prints all numbers between the lowerLimit and
+# the upperLimit if the parameters are valid.
+Integer printNumbers(Integer lowerLimit, Integer upperLimit)
+{
+   Integer i;
+   i = 0;
+
+   if(lowerLimit >= upperLimit)
+   {
+    print "Error\n";
+   }
+   else {
+     while(i <= upperLimit)
+     {
+        print i;
+        i = i + 1;
+     }
+   }
+
+   return 0;
+}
+
+
+Integer main()
+{
+  printNumbers(1,10);
+  return 0;
+}

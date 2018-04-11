@@ -48,7 +48,6 @@ typedef enum
    stmt,
    while_stmt,
    if_stmt,
-   else_stmt,
    ret_stmt,
    print_stmt,
    assign,
@@ -79,8 +78,7 @@ typedef enum
    t_WHILE,
    t_RETURN,
    t_PRINT,
-   t_dummy,
-   idlist
+   t_dummy
 }ASTNodeType;
 
 #define MAXCHILD 5

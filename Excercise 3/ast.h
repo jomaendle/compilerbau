@@ -75,11 +75,11 @@ typedef enum
    t_INTEGER,
    t_STRING,
    t_IF,
-   t_ELSE,
    t_WHILE,
    t_RETURN,
    t_PRINT,
    t_dummy,
+   t_ELSE,
    idlist
 }ASTNodeType;
 

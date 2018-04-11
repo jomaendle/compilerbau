@@ -1,6 +1,6 @@
 /*
     Parser for the nanoLang compiler.
-    Authors: Konstantin Kläger, Isabel Staaden, Carolin Rösch
+    Authors: Rodriguez Diaz
 */
 
 %{
@@ -11,7 +11,9 @@
 
    extern int yylex(void);
    extern int yylineno;
+   extern int yycolno;
    extern FILE *yyin;
+   void yyerror(const char *err, ...);
 
    AST_p ast;
 
@@ -46,7 +48,7 @@ start: prog { $$ = $1; ast = $1; }
 
 prog: { $$ = ASTEmptyAlloc(); }
     | prog def { $$ = ASTAlloc2(prog, NULL, 0, $1, $2); }
-
+    | error def { $$ = 0; }
 ;
 
 def: vardef { $$ = $1; }
@@ -54,7 +56,7 @@ def: vardef { $$ = $1; }
 ;
 
 vardef: type idlist SEMICOLON { $$ = ASTAlloc2(vardef, NULL, 0, $1, $2); ASTFree($3); }
-
+      | error SEMICOLON { $$ = 0; }
 ;
 
 idlist: IDENT { $$ = $1; }
@@ -62,7 +64,7 @@ idlist: IDENT { $$ = $1; }
 ;
 
 fundef: type IDENT OPENPAR params CLOSEPAR body { $$ = ASTAlloc(fundef, NULL, 0, $1, $2, $4, $6); ASTFree($3); ASTFree($5); }
-
+      | error body { $$ = 0; }
 ;
 
 type: STRING { $$ = $1; }
@@ -153,6 +155,14 @@ arglist: expr { $$ = ASTAlloc2(arglist, NULL, 0, $1, NULL); }
 %%
 
 
+void yyerror(const char *err, ...) {
+  va_list ap;
+  va_start(ap, err);
+
+  fprintf(stderr, "Line %d: Column %d: Error: ", yylineno, yycolno);
+  vfprintf(stderr, err, ap);
+  fprintf(stderr, "\n");
+}
 
 int main (int argc, char* argv[])
 {

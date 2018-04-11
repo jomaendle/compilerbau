@@ -1,1 +1,17 @@
--a+b*(c+d)
+Integer hello(Integer repeat, String message)
+{
+    Integer i;
+    i=0;
+    while(i<repeat)
+    {
+        print message;
+        i = i+1;
+    }
+    return 0;
+}
+
+Integer main()
+{
+    hello(10, "Hello\n");
+    return 0;
+}

@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 6 "parser.y" /* yacc.c:339  */
+#line 6 "nanoLangParser.y" /* yacc.c:339  */
 
    # include <stdio.h>
    # include <stdlib.h>
@@ -71,12 +71,14 @@
 
    extern int yylex(void);
    extern int yylineno;
+   extern int yycolno;
    extern FILE *yyin;
+   void yyerror(const char *err, ...);
 
    AST_p ast;
 
 
-#line 80 "parser.tab.c" /* yacc.c:339  */
+#line 82 "nanoLangParser.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -95,9 +97,9 @@
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "parser.tab.h".  */
-#ifndef YY_YY_PARSER_TAB_H_INCLUDED
-# define YY_YY_PARSER_TAB_H_INCLUDED
+   by #include "nanoLangParser.tab.h".  */
+#ifndef YY_YY_NANOLANGPARSER_TAB_H_INCLUDED
+# define YY_YY_NANOLANGPARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -168,11 +170,11 @@ extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
 int yyparse (void);
 
-#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_NANOLANGPARSER_TAB_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 176 "parser.tab.c" /* yacc.c:358  */
+#line 178 "nanoLangParser.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -414,18 +416,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  3
+#define YYFINAL  11
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   98
+#define YYLAST   123
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  31
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  26
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  56
+#define YYNRULES  59
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  100
+#define YYNSTATES  106
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -474,12 +476,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    45,    45,    47,    48,    52,    53,    56,    60,    61,
-      64,    68,    69,    72,    73,    76,    77,    80,    83,    86,
-      87,    90,    91,    94,    95,    96,    97,    98,    99,   102,
-     105,   106,   109,   112,   115,   118,   121,   122,   123,   124,
-     125,   126,   129,   130,   131,   132,   133,   134,   135,   136,
-     137,   138,   141,   144,   145,   148,   149
+       0,    47,    47,    49,    50,    51,    54,    55,    58,    59,
+      62,    63,    66,    67,    70,    71,    74,    75,    78,    79,
+      82,    85,    88,    89,    92,    93,    96,    97,    98,    99,
+     100,   101,   104,   107,   108,   111,   114,   117,   120,   123,
+     124,   125,   126,   127,   128,   131,   132,   133,   134,   135,
+     136,   137,   138,   139,   140,   143,   146,   147,   150,   151
 };
 #endif
 
@@ -512,12 +514,12 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -62
+#define YYPACT_NINF -48
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-62)))
+  (!!((Yystate) == (-48)))
 
-#define YYTABLE_NINF -1
+#define YYTABLE_NINF -25
 
 #define yytable_value_is_error(Yytable_value) \
   0
@@ -526,16 +528,17 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -62,     6,     7,   -62,   -62,   -62,   -62,   -62,   -62,    14,
-     -20,    -6,     7,   -62,    26,    39,    28,    27,   -62,   -62,
-     -62,    29,     7,   -62,   -62,   -62,     7,   -62,    55,    -1,
-     -62,    -8,    50,    52,    35,    35,   -62,   -62,   -62,   -62,
-     -62,   -62,   -62,   -62,    49,    35,    35,    35,    35,    58,
-     -62,   -62,    35,    35,     4,   -62,    30,   -62,    51,    66,
-      64,    56,    65,    47,    67,   -62,    59,    35,    35,    35,
-      35,   -62,   -62,   -62,   -62,    35,    29,    35,    35,    35,
-      35,    35,    35,    29,   -62,    10,    10,   -62,   -62,    66,
-      79,    66,    66,    66,    66,    66,    66,   -62,    29,   -62
+      88,    22,     5,    92,    42,   -48,   -48,   -48,   -48,   -48,
+      23,   -48,   -48,   -48,   -48,   -48,     6,    70,    11,     9,
+     -48,    31,    15,   -48,    52,    -2,    69,    82,    63,   -48,
+     -48,   -48,   -11,    84,    85,    49,    49,   -48,   -48,   -48,
+     -48,   -48,   -48,   -48,   -48,    86,   -48,    87,     9,    49,
+      49,    49,    49,    89,   -48,   -48,    49,    49,    17,   -48,
+      45,   -48,   -48,   -48,    65,    25,    91,    90,    93,    61,
+      94,   -48,    81,    49,    49,    49,    49,   -48,   -48,   -48,
+     -48,    49,    87,    49,    49,    49,    49,    49,    49,    87,
+     -48,    83,    83,   -48,   -48,    25,    98,    25,    25,    25,
+      25,    25,    25,   -48,    87,   -48
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -543,101 +546,109 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       3,     0,     2,     1,    12,    11,     4,     5,     6,     0,
-       8,     0,    13,     7,     0,     0,     0,    14,    15,     9,
-      17,     0,     0,    19,    10,    16,    21,    20,     0,     0,
-       8,     0,     0,     0,     0,     0,    18,    22,    23,    24,
-      25,    26,    27,    28,     0,     0,    53,     0,     0,    44,
-      45,    43,     0,     0,     0,    42,     0,    35,     0,    55,
-       0,    54,     0,     0,     0,    51,     0,     0,     0,     0,
-       0,    32,    33,    34,    52,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,    46,    47,    48,    49,    50,    56,
-      30,    36,    37,    38,    39,    40,    41,    29,     0,    31
+       0,     0,     0,     0,     0,    15,    14,     5,     6,     7,
+       0,     1,     4,     9,    22,    13,    10,     0,     0,    16,
+       8,     0,     0,    23,     0,     0,     0,     0,    17,    18,
+      11,    10,     0,     0,     0,     0,     0,    21,    25,    26,
+      27,    28,    29,    30,    31,     0,    20,     0,     0,     0,
+      56,     0,     0,    47,    48,    46,     0,     0,     0,    45,
+       0,    38,    12,    19,     0,    58,     0,    57,     0,     0,
+       0,    54,     0,     0,     0,     0,     0,    35,    36,    37,
+      55,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      49,    50,    51,    52,    53,    59,    33,    39,    40,    41,
+      42,    43,    44,    32,     0,    34
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -62,   -62,   -62,   -62,    68,   -62,   -62,     1,   -62,   -62,
-      71,   -61,   -62,   -62,   -62,   -62,   -62,   -62,   -62,   -62,
-     -62,    48,   -34,    69,   -62,   -62
+     -48,   -48,   -48,   108,    96,   -48,   -48,   -15,   -48,   -48,
+      72,   -47,   -48,   -48,   -48,   -48,   -48,   -48,   -48,   -48,
+     -48,    71,   -25,    97,   -48,   -48
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     2,     6,     7,    11,     8,    15,    16,    17,
-      18,    24,    26,    29,    37,    38,    39,    40,    41,    42,
-      43,    62,    63,    55,    60,    61
+      -1,     2,     3,     7,     8,    17,     9,    10,    27,    28,
+      29,    15,    18,    25,    38,    39,    40,    41,    42,    43,
+      44,    68,    69,    59,    66,    67
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
      positive, shift that token.  If negative, reduce the rule whose
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_uint8 yytable[] =
+static const yytype_int8 yytable[] =
 {
-      54,    56,    31,     9,    12,    45,     3,    32,    33,    34,
-      35,    58,    59,     4,     5,    90,    46,    10,    65,    66,
-      13,    14,    97,    67,    68,    69,    70,    28,    36,    19,
-      71,    69,    70,    85,    86,    87,    88,    99,    49,    50,
-      51,    89,    20,    91,    92,    93,    94,    95,    96,    67,
-      68,    69,    70,    21,    22,    52,    72,    23,    30,    53,
-      77,    78,    79,    80,    81,    82,    67,    68,    69,    70,
-      67,    68,    69,    70,    47,    57,    48,    73,    67,    68,
-      69,    70,    46,    75,    84,    67,    68,    69,    70,    74,
-      76,    98,    83,    25,    27,     0,    64,     0,    44
+      62,    32,    49,    24,    26,    11,    33,    34,    35,    36,
+      58,    60,    22,    50,   -24,     5,     6,     5,     6,   -24,
+     -24,   -24,   -24,     4,    64,    65,    16,    37,     5,     6,
+      19,    71,    72,    26,    30,    96,    73,    74,    75,    76,
+     -24,    13,   103,    77,    73,    74,    75,    76,    91,    92,
+      93,    94,    53,    54,    55,    31,    95,   105,    97,    98,
+      99,   100,   101,   102,    73,    74,    75,    76,    13,    56,
+      14,    78,    46,    57,    83,    84,    85,    86,    87,    88,
+      73,    74,    75,    76,    73,    74,    75,    76,    -3,     1,
+      48,    79,    -2,     4,    -3,    -3,    20,    21,     5,     6,
+      73,    74,    75,    76,    75,    76,    90,    47,    51,    52,
+     104,    12,    61,    50,    23,    14,    80,    81,    82,    89,
+      63,     0,    45,    70
 };
 
 static const yytype_int8 yycheck[] =
 {
-      34,    35,     3,     2,    24,    13,     0,     8,     9,    10,
-      11,    45,    46,     6,     7,    76,    24,     3,    52,    53,
-      26,    27,    83,    19,    20,    21,    22,    26,    29,     3,
-      26,    21,    22,    67,    68,    69,    70,    98,     3,     4,
-       5,    75,     3,    77,    78,    79,    80,    81,    82,    19,
-      20,    21,    22,    25,    27,    20,    26,    28,     3,    24,
-      13,    14,    15,    16,    17,    18,    19,    20,    21,    22,
-      19,    20,    21,    22,    24,    26,    24,    26,    19,    20,
-      21,    22,    24,    27,    25,    19,    20,    21,    22,    25,
-      25,    12,    25,    22,    26,    -1,    48,    -1,    29
+      47,     3,    13,    18,    19,     0,     8,     9,    10,    11,
+      35,    36,     1,    24,     3,     6,     7,     6,     7,     8,
+       9,    10,    11,     1,    49,    50,     3,    29,     6,     7,
+      24,    56,    57,    48,     3,    82,    19,    20,    21,    22,
+      29,    26,    89,    26,    19,    20,    21,    22,    73,    74,
+      75,    76,     3,     4,     5,     3,    81,   104,    83,    84,
+      85,    86,    87,    88,    19,    20,    21,    22,    26,    20,
+      28,    26,     3,    24,    13,    14,    15,    16,    17,    18,
+      19,    20,    21,    22,    19,    20,    21,    22,     0,     1,
+      27,    26,     0,     1,     6,     7,    26,    27,     6,     7,
+      19,    20,    21,    22,    21,    22,    25,    25,    24,    24,
+      12,     3,    26,    24,    18,    28,    25,    27,    25,    25,
+      48,    -1,    25,    52
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    32,    33,     0,     6,     7,    34,    35,    37,    38,
-       3,    36,    24,    26,    27,    38,    39,    40,    41,     3,
-       3,    25,    27,    28,    42,    41,    43,    35,    38,    44,
-       3,     3,     8,     9,    10,    11,    29,    45,    46,    47,
-      48,    49,    50,    51,    54,    13,    24,    24,    24,     3,
-       4,     5,    20,    24,    53,    54,    53,    26,    53,    53,
-      55,    56,    52,    53,    52,    53,    53,    19,    20,    21,
-      22,    26,    26,    26,    25,    27,    25,    13,    14,    15,
-      16,    17,    18,    25,    25,    53,    53,    53,    53,    53,
-      42,    53,    53,    53,    53,    53,    53,    42,    12,    42
+       0,     1,    32,    33,     1,     6,     7,    34,    35,    37,
+      38,     0,    34,    26,    28,    42,     3,    36,    43,    24,
+      26,    27,     1,    35,    38,    44,    38,    39,    40,    41,
+       3,     3,     3,     8,     9,    10,    11,    29,    45,    46,
+      47,    48,    49,    50,    51,    54,     3,    25,    27,    13,
+      24,    24,    24,     3,     4,     5,    20,    24,    53,    54,
+      53,    26,    42,    41,    53,    53,    55,    56,    52,    53,
+      52,    53,    53,    19,    20,    21,    22,    26,    26,    26,
+      25,    27,    25,    13,    14,    15,    16,    17,    18,    25,
+      25,    53,    53,    53,    53,    53,    42,    53,    53,    53,
+      53,    53,    53,    42,    12,    42
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    31,    32,    33,    33,    34,    34,    35,    36,    36,
-      37,    38,    38,    39,    39,    40,    40,    41,    42,    43,
-      43,    44,    44,    45,    45,    45,    45,    45,    45,    46,
-      47,    47,    48,    49,    50,    51,    52,    52,    52,    52,
-      52,    52,    53,    53,    53,    53,    53,    53,    53,    53,
-      53,    53,    54,    55,    55,    56,    56
+       0,    31,    32,    33,    33,    33,    34,    34,    35,    35,
+      36,    36,    37,    37,    38,    38,    39,    39,    40,    40,
+      41,    42,    43,    43,    44,    44,    45,    45,    45,    45,
+      45,    45,    46,    47,    47,    48,    49,    50,    51,    52,
+      52,    52,    52,    52,    52,    53,    53,    53,    53,    53,
+      53,    53,    53,    53,    53,    54,    55,    55,    56,    56
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     0,     2,     1,     1,     3,     1,     3,
-       6,     1,     1,     0,     1,     1,     3,     2,     4,     0,
-       2,     0,     2,     1,     1,     1,     1,     1,     1,     5,
-       5,     7,     3,     3,     4,     2,     3,     3,     3,     3,
-       3,     3,     1,     1,     1,     1,     3,     3,     3,     3,
-       3,     2,     4,     0,     1,     1,     3
+       0,     2,     1,     0,     2,     2,     1,     1,     3,     2,
+       1,     3,     6,     2,     1,     1,     0,     1,     1,     3,
+       2,     4,     0,     2,     0,     2,     1,     1,     1,     1,
+       1,     1,     5,     5,     7,     3,     3,     4,     2,     3,
+       3,     3,     3,     3,     3,     1,     1,     1,     1,     3,
+       3,     3,     3,     3,     2,     4,     0,     1,     1,     3
 };
 
 
@@ -1407,337 +1418,355 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 45 "parser.y" /* yacc.c:1646  */
+#line 47 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); ast = (yyvsp[0]); }
-#line 1413 "parser.tab.c" /* yacc.c:1646  */
+#line 1424 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 47 "parser.y" /* yacc.c:1646  */
+#line 49 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = ASTEmptyAlloc(); }
-#line 1419 "parser.tab.c" /* yacc.c:1646  */
+#line 1430 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 48 "parser.y" /* yacc.c:1646  */
+#line 50 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = ASTAlloc2(prog, NULL, 0, (yyvsp[-1]), (yyvsp[0])); }
-#line 1425 "parser.tab.c" /* yacc.c:1646  */
+#line 1436 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 52 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1431 "parser.tab.c" /* yacc.c:1646  */
+#line 51 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = 0; }
+#line 1442 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 53 "parser.y" /* yacc.c:1646  */
+#line 54 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 1437 "parser.tab.c" /* yacc.c:1646  */
+#line 1448 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 56 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(vardef, NULL, 0, (yyvsp[-2]), (yyvsp[-1])); ASTFree((yyvsp[0])); }
-#line 1443 "parser.tab.c" /* yacc.c:1646  */
+#line 55 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1454 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 60 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1449 "parser.tab.c" /* yacc.c:1646  */
+#line 58 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(vardef, NULL, 0, (yyvsp[-2]), (yyvsp[-1])); ASTFree((yyvsp[0])); }
+#line 1460 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 61 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(idlist, NULL, 0, (yyvsp[-2]), NULL); ASTFree((yyvsp[-1]));ASTFree((yyvsp[0])); }
-#line 1455 "parser.tab.c" /* yacc.c:1646  */
+#line 59 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = 0; }
+#line 1466 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 64 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc(fundef, NULL, 0, (yyvsp[-5]), (yyvsp[-4]), (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-3])); ASTFree((yyvsp[-1])); }
-#line 1461 "parser.tab.c" /* yacc.c:1646  */
+#line 62 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1472 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 68 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1467 "parser.tab.c" /* yacc.c:1646  */
+#line 63 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(idlist, NULL, 0, (yyvsp[-2]), NULL); ASTFree((yyvsp[-1]));ASTFree((yyvsp[0])); }
+#line 1478 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 69 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1473 "parser.tab.c" /* yacc.c:1646  */
+#line 66 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc(fundef, NULL, 0, (yyvsp[-5]), (yyvsp[-4]), (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-3])); ASTFree((yyvsp[-1])); }
+#line 1484 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 72 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(params, NULL, 0, NULL, NULL); }
-#line 1479 "parser.tab.c" /* yacc.c:1646  */
+#line 67 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = 0; }
+#line 1490 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 73 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(params, NULL, 0, (yyvsp[0]), NULL); }
-#line 1485 "parser.tab.c" /* yacc.c:1646  */
+#line 70 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1496 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 76 "parser.y" /* yacc.c:1646  */
+#line 71 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 1491 "parser.tab.c" /* yacc.c:1646  */
+#line 1502 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 77 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(paramlist, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1497 "parser.tab.c" /* yacc.c:1646  */
+#line 74 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(params, NULL, 0, NULL, NULL); }
+#line 1508 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 80 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(param, NULL, 0, (yyvsp[-1]), (yyvsp[0])); }
-#line 1503 "parser.tab.c" /* yacc.c:1646  */
+#line 75 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(params, NULL, 0, (yyvsp[0]), NULL); }
+#line 1514 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 83 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(body, NULL, 0, (yyvsp[-2]), (yyvsp[-1])); ASTFree((yyvsp[-3])); ASTFree((yyvsp[0])); }
-#line 1509 "parser.tab.c" /* yacc.c:1646  */
+#line 78 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1520 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 86 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTEmptyAlloc(); }
-#line 1515 "parser.tab.c" /* yacc.c:1646  */
+#line 79 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(paramlist, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1526 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 87 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(vardefs, NULL, 0, (yyvsp[-1]), (yyvsp[0])); }
-#line 1521 "parser.tab.c" /* yacc.c:1646  */
+#line 82 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(param, NULL, 0, (yyvsp[-1]), (yyvsp[0])); }
+#line 1532 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 90 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTEmptyAlloc(); }
-#line 1527 "parser.tab.c" /* yacc.c:1646  */
+#line 85 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(body, NULL, 0, (yyvsp[-2]), (yyvsp[-1])); ASTFree((yyvsp[-3])); ASTFree((yyvsp[0])); }
+#line 1538 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 91 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(stmts, NULL, 0, (yyvsp[-1]), (yyvsp[0])); }
-#line 1533 "parser.tab.c" /* yacc.c:1646  */
+#line 88 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTEmptyAlloc(); }
+#line 1544 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 94 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1539 "parser.tab.c" /* yacc.c:1646  */
+#line 89 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(vardefs, NULL, 0, (yyvsp[-1]), (yyvsp[0])); }
+#line 1550 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 95 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1545 "parser.tab.c" /* yacc.c:1646  */
+#line 92 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTEmptyAlloc(); }
+#line 1556 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 96 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1551 "parser.tab.c" /* yacc.c:1646  */
+#line 93 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(stmts, NULL, 0, (yyvsp[-1]), (yyvsp[0])); }
+#line 1562 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 97 "parser.y" /* yacc.c:1646  */
+#line 96 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 1557 "parser.tab.c" /* yacc.c:1646  */
+#line 1568 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 98 "parser.y" /* yacc.c:1646  */
+#line 97 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 1563 "parser.tab.c" /* yacc.c:1646  */
+#line 1574 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 99 "parser.y" /* yacc.c:1646  */
+#line 98 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 1569 "parser.tab.c" /* yacc.c:1646  */
+#line 1580 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 102 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc(while_stmt, NULL, 0, (yyvsp[-4]), (yyvsp[-2]), (yyvsp[0]), NULL); ASTFree((yyvsp[-3]));ASTFree((yyvsp[-1])); }
-#line 1575 "parser.tab.c" /* yacc.c:1646  */
+#line 99 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1586 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 105 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc(if_stmt, NULL, 0, (yyvsp[-4]), (yyvsp[-2]), (yyvsp[0]), NULL); ASTFree((yyvsp[-3])); ASTFree((yyvsp[-1])); }
-#line 1581 "parser.tab.c" /* yacc.c:1646  */
+#line 100 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1592 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 106 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc(if_stmt, NULL, 0, (yyvsp[-6]), (yyvsp[-4]), (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-5])); ASTFree((yyvsp[-3])); ASTFree((yyvsp[-1])); }
-#line 1587 "parser.tab.c" /* yacc.c:1646  */
+#line 101 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1598 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 109 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(ret_stmt, NULL, 0, (yyvsp[-2]), (yyvsp[-1])); ASTFree((yyvsp[0])); }
-#line 1593 "parser.tab.c" /* yacc.c:1646  */
+#line 104 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc(while_stmt, NULL, 0, (yyvsp[-4]), (yyvsp[-2]), (yyvsp[0]), NULL); ASTFree((yyvsp[-3]));ASTFree((yyvsp[-1])); }
+#line 1604 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 112 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(print_stmt, NULL, 0, (yyvsp[-2]), (yyvsp[-1])); ASTFree((yyvsp[0])); }
-#line 1599 "parser.tab.c" /* yacc.c:1646  */
+#line 107 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc(if_stmt, NULL, 0, (yyvsp[-4]), (yyvsp[-2]), (yyvsp[0]), NULL); ASTFree((yyvsp[-3])); ASTFree((yyvsp[-1])); }
+#line 1610 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 115 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(assign, NULL, 0, (yyvsp[-3]), (yyvsp[-1])); ASTFree((yyvsp[-2])); ASTFree((yyvsp[0])); }
-#line 1605 "parser.tab.c" /* yacc.c:1646  */
+#line 108 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc(if_stmt, NULL, 0, (yyvsp[-6]), (yyvsp[-4]), (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-5])); ASTFree((yyvsp[-3])); ASTFree((yyvsp[-1])); }
+#line 1616 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 118 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(funcall_stmt, NULL, 0, (yyvsp[-1]), NULL); ASTFree((yyvsp[0])); }
-#line 1611 "parser.tab.c" /* yacc.c:1646  */
+#line 111 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(ret_stmt, NULL, 0, (yyvsp[-2]), (yyvsp[-1])); ASTFree((yyvsp[0])); }
+#line 1622 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 121 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_EQ, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1617 "parser.tab.c" /* yacc.c:1646  */
+#line 114 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(print_stmt, NULL, 0, (yyvsp[-2]), (yyvsp[-1])); ASTFree((yyvsp[0])); }
+#line 1628 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 122 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_NEQ, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1623 "parser.tab.c" /* yacc.c:1646  */
+#line 117 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(assign, NULL, 0, (yyvsp[-3]), (yyvsp[-1])); ASTFree((yyvsp[-2])); ASTFree((yyvsp[0])); }
+#line 1634 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 123 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_LT, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1629 "parser.tab.c" /* yacc.c:1646  */
+#line 120 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(funcall_stmt, NULL, 0, (yyvsp[-1]), NULL); ASTFree((yyvsp[0])); }
+#line 1640 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 124 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_GT, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1635 "parser.tab.c" /* yacc.c:1646  */
+#line 123 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_EQ, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1646 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 125 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_LEQ, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1641 "parser.tab.c" /* yacc.c:1646  */
+#line 124 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_NEQ, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1652 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 126 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_GEQ, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1647 "parser.tab.c" /* yacc.c:1646  */
+#line 125 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_LT, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1658 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 129 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1653 "parser.tab.c" /* yacc.c:1646  */
+#line 126 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_GT, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1664 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 130 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1659 "parser.tab.c" /* yacc.c:1646  */
+#line 127 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_LEQ, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1670 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 131 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1665 "parser.tab.c" /* yacc.c:1646  */
+#line 128 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_GEQ, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1676 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 132 "parser.y" /* yacc.c:1646  */
+#line 131 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 1671 "parser.tab.c" /* yacc.c:1646  */
+#line 1682 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 133 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-1]);ASTFree((yyvsp[-2])); ASTFree((yyvsp[0])); }
-#line 1677 "parser.tab.c" /* yacc.c:1646  */
+#line 132 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1688 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 134 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_PLUS, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1683 "parser.tab.c" /* yacc.c:1646  */
+#line 133 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1694 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 135 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_MINUS, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1689 "parser.tab.c" /* yacc.c:1646  */
+#line 134 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1700 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 136 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_MULT, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1695 "parser.tab.c" /* yacc.c:1646  */
+#line 135 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-1]);ASTFree((yyvsp[-2])); ASTFree((yyvsp[0])); }
+#line 1706 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 137 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_DIV, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1701 "parser.tab.c" /* yacc.c:1646  */
+#line 136 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_PLUS, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1712 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 138 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(t_MINUS, NULL, 0, (yyvsp[0]), NULL); ASTFree((yyvsp[-1])); }
-#line 1707 "parser.tab.c" /* yacc.c:1646  */
+#line 137 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_MINUS, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1718 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 141 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(funcall, NULL, 0, (yyvsp[-3]), (yyvsp[-1])); ASTFree((yyvsp[-2])); ASTFree((yyvsp[0])); }
-#line 1713 "parser.tab.c" /* yacc.c:1646  */
+#line 138 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_MULT, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1724 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 144 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTEmptyAlloc(); }
-#line 1719 "parser.tab.c" /* yacc.c:1646  */
+#line 139 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_DIV, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
+#line 1730 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 145 "parser.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1725 "parser.tab.c" /* yacc.c:1646  */
+#line 140 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(t_MINUS, NULL, 0, (yyvsp[0]), NULL); ASTFree((yyvsp[-1])); }
+#line 1736 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 148 "parser.y" /* yacc.c:1646  */
-    { (yyval) = ASTAlloc2(arglist, NULL, 0, (yyvsp[0]), NULL); }
-#line 1731 "parser.tab.c" /* yacc.c:1646  */
+#line 143 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(funcall, NULL, 0, (yyvsp[-3]), (yyvsp[-1])); ASTFree((yyvsp[-2])); ASTFree((yyvsp[0])); }
+#line 1742 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 149 "parser.y" /* yacc.c:1646  */
+#line 146 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTEmptyAlloc(); }
+#line 1748 "nanoLangParser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 57:
+#line 147 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1754 "nanoLangParser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 58:
+#line 150 "nanoLangParser.y" /* yacc.c:1646  */
+    { (yyval) = ASTAlloc2(arglist, NULL, 0, (yyvsp[0]), NULL); }
+#line 1760 "nanoLangParser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 59:
+#line 151 "nanoLangParser.y" /* yacc.c:1646  */
     { (yyval) = ASTAlloc2(arglist, NULL, 0, (yyvsp[-2]), (yyvsp[0])); ASTFree((yyvsp[-1])); }
-#line 1737 "parser.tab.c" /* yacc.c:1646  */
+#line 1766 "nanoLangParser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1741 "parser.tab.c" /* yacc.c:1646  */
+#line 1770 "nanoLangParser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1972,10 +2001,18 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 153 "parser.y" /* yacc.c:1906  */
+#line 155 "nanoLangParser.y" /* yacc.c:1906  */
 
 
 
+void yyerror(const char *err, ...) {
+  va_list ap;
+  va_start(ap, err);
+
+  fprintf(stderr, "Line %d: Column %d: Error: ", yylineno, yycolno);
+  vfprintf(stderr, err, ap);
+  fprintf(stderr, "\n");
+}
 
 int main (int argc, char* argv[])
 {
