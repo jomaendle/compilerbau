@@ -1,0 +1,174 @@
+digraph ast {
+   ordering=out
+   ast181 [label="prog"]
+   ast181 -> ast135
+   ast135 [label="prog"]
+   ast135 -> ast19
+   ast19 [label="prog"]
+   ast19 -> ast12
+   ast12 [label="vardef"]
+   ast12 -> ast0
+   ast0 [label="t_INTEGER"]
+   ast12 -> ast10
+   ast10 [label="idlist"]
+   ast10 -> ast6
+   ast6 [label="idlist"]
+   ast6 -> ast2
+   ast2 [label="t_IDENT\ni"]
+   ast6 -> ast5
+   ast5 [label="t_IDENT\na"]
+   ast10 -> ast9
+   ast9 [label="t_IDENT\nb"]
+   ast19 -> ast18
+   ast18 [label="vardef"]
+   ast18 -> ast14
+   ast14 [label="t_INTEGER"]
+   ast18 -> ast16
+   ast16 [label="t_IDENT\nc"]
+   ast135 -> ast134
+   ast134 [label="fundef"]
+   ast134 -> ast22
+   ast22 [label="t_INTEGER"]
+   ast134 -> ast24
+   ast24 [label="t_IDENT\nfun1"]
+   ast134 -> ast45
+   ast45 [label="params"]
+   ast45 -> ast43
+   ast43 [label="params"]
+   ast43 -> ast36
+   ast36 [label="params"]
+   ast36 -> ast29
+   ast29 [label="param"]
+   ast29 -> ast26
+   ast26 [label="t_INTEGER"]
+   ast29 -> ast28
+   ast28 [label="t_IDENT\nloop"]
+   ast36 -> ast35
+   ast35 [label="param"]
+   ast35 -> ast32
+   ast32 [label="t_STRING"]
+   ast35 -> ast34
+   ast34 [label="t_IDENT\ngreeting"]
+   ast43 -> ast42
+   ast42 [label="param"]
+   ast42 -> ast39
+   ast39 [label="t_STRING"]
+   ast42 -> ast41
+   ast41 [label="t_IDENT\nrepeat"]
+   ast134 -> ast133
+   ast133 [label="body"]
+   ast133 -> ast56
+   ast56 [label="vardef"]
+   ast56 -> ast52
+   ast52 [label="t_INTEGER"]
+   ast56 -> ast54
+   ast54 [label="t_IDENT\ni"]
+   ast133 -> ast130
+   ast130 [label="stmts"]
+   ast130 -> ast77
+   ast77 [label="stmts"]
+   ast77 -> ast67
+   ast67 [label="stmt"]
+   ast67 -> ast66
+   ast66 [label="print_stmt"]
+   ast66 -> ast64
+   ast64 [label="t_IDENT\ngreeting"]
+   ast77 -> ast76
+   ast76 [label="assign"]
+   ast76 -> ast72
+   ast72 [label="t_IDENT\ni"]
+   ast76 -> ast74
+   ast74 [label="t_INTLIT\n0"]
+   ast130 -> ast129
+   ast129 [label="while_stmt"]
+   ast129 -> ast88
+   ast88 [label="t_LT"]
+   ast88 -> ast84
+   ast84 [label="t_IDENT\ni"]
+   ast88 -> ast86
+   ast86 [label="t_IDENT\nloop"]
+   ast129 -> ast128
+   ast128 [label="body"]
+   ast128 -> ast122
+   ast122 [label="stmts"]
+   ast122 -> ast109
+   ast109 [label="stmt"]
+   ast109 -> ast108
+   ast108 [label="assign"]
+   ast108 -> ast101
+   ast101 [label="t_IDENT\ni"]
+   ast108 -> ast107
+   ast107 [label="t_PLUS"]
+   ast107 -> ast103
+   ast103 [label="t_IDENT\ni"]
+   ast107 -> ast105
+   ast105 [label="t_INTLIT\n1"]
+   ast122 -> ast121
+   ast121 [label="print_stmt"]
+   ast121 -> ast119
+   ast119 [label="t_IDENT\nrepeat"]
+   ast181 -> ast180
+   ast180 [label="fundef"]
+   ast180 -> ast138
+   ast138 [label="t_INTEGER"]
+   ast180 -> ast140
+   ast140 [label="t_IDENT\nmain"]
+   ast180 -> ast143
+   ast143 [label="params"]
+   ast180 -> ast179
+   ast179 [label="body"]
+   ast179 -> ast176
+   ast176 [label="stmts"]
+   ast176 -> ast157
+   ast157 [label="stmt"]
+   ast157 -> ast156
+   ast156 [label="assign"]
+   ast156 -> ast150
+   ast150 [label="t_IDENT\ni"]
+   ast156 -> ast154
+   ast154 [label="t_INTLIT\n5"]
+   ast176 -> ast174
+   ast174 [label="funcall"]
+   ast174 -> ast162
+   ast162 [label="t_IDENT\nfun1"]
+   ast174 -> ast173
+   ast173 [label="arglist"]
+   ast173 -> ast169
+   ast169 [label="arglist"]
+   ast169 -> ast164
+   ast164 [label="t_IDENT\ni"]
+   ast169 -> ast167
+   ast167 [label="Hello"]
+   ast173 -> ast171
+   ast171 [label="TINF13B"]
+}
+# STInsertVarDef():(vardef (t_INTEGER ) (idlist (idlist t_IDENT<i> t_IDENT<a> ) t_IDENT<b> ) ) 
+# STInsertVarDef():(vardef (t_INTEGER ) t_IDENT<c> ) 
+# STInsertFunDef():(t_INTEGER ) 
+# STInsertVarDef():(param (t_INTEGER ) t_IDENT<loop> ) 
+# STInsertVarDef():(vardef (t_INTEGER ) t_IDENT<i> ) 
+# STInsertFunDef():(t_INTEGER ) 
+0:0: error: undefined identifier greeting
+0:0: error: undefined identifier repeat
+0:0: error: undefined identifier greeting
+0:0: error: undefined identifier repeat
+0:0: error: Too many arguments to call of function 'fun1'
+0:0: error: Too many arguments to call of function 'fun1'
+0:0: warning: cannot guarantee proper return value for function fun1()
+0:0: warning: cannot guarantee proper return value for function main()
+Global symbols:
+---------------
+i                   : Integer
+a                   : Integer
+b                   : Integer
+c                   : Integer
+fun1                : (Integer) -> Integer
+main                : () -> Integer
+
+Types:
+------
+0: NoType
+1: String
+2: Integer
+3: (Integer) -> Integer
+4: () -> Integer

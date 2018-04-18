@@ -1,15 +1,15 @@
 /*
     Parser for the nanoLang compiler.
-    Authors: Rodriguez Diaz
+    Authors: Konstantin Kläger, Isabel Staaden, Carolin Rösch
 */
 
 %{
-   # include <stdio.h>
-   # include <stdlib.h>
-   # include <stdarg.h>
-   # include "ast.h"
-   # include "types.h"
-   # include "symbols.h"
+   #include <stdio.h>
+   #include <stdlib.h>
+   #include <stdarg.h>
+   #include "ast.h"
+   #include "types.h"
+   #include "semantic.h"
 
    extern int yylex(void);
    extern int yylineno;
@@ -171,7 +171,6 @@ int main (int argc, char* argv[])
   int i;
   int res;
   bool printdot   = false;
-  bool printexpr  = true;
   bool printsexpr = false;
 
    ++argv, --argc;  /* skip over program name */
@@ -181,14 +180,12 @@ int main (int argc, char* argv[])
       if(strcmp(argv[0], "--dot")==0)
       {
          printdot   = true;
-         printexpr  = false;
          printsexpr = false;
          ++argv, --argc;
       }
       else if(strcmp(argv[0], "--sexpr")==0)
       {
          printdot   = false;
-         printexpr  = false;
          printsexpr = true;
          ++argv, --argc;
       }
@@ -205,67 +202,28 @@ int main (int argc, char* argv[])
 
    res = yyparse();
 
-   TypeTable_p   tt;
-   SymbolTable_p st;
-   NanoTypeCell  type;
-
-   printf("Creating type table...\n");
-   tt = TypeTableAlloc();
-   printf("Initial type table:\n");
-   TypeTablePrint(stdout, tt);
-   type.constructor = tc_function;
-   type.typeargno = 3;
-   type.typeargs[0] = T_String;
-   type.typeargs[1] = T_String;
-   type.typeargs[2] = T_Integer;
-   TypeTableGetTypeIndex(tt, &type);
-   printf("Second type table:\n");
-   TypeTablePrint(stdout, tt);
-   type.constructor = tc_function;
-   type.typeargno = 4;
-   type.typeargs[0] = T_Integer;
-   type.typeargs[1] = T_String;
-   type.typeargs[2] = T_Integer;
-   type.typeargs[3] = T_String;
-   TypeTableGetTypeIndex(tt, &type);
-   printf("Third type table:\n");
-   TypeTablePrint(stdout, tt);
-   TypeTableGetTypeIndex(tt, &type);
-   printf("Fourth type table (=3rd type table):\n");
-   TypeTablePrint(stdout, tt);
-
-   printf("\nBasic (empty) symbol table:\n");
-   st = SymbolTableAlloc();
-   SymbolTablePrintGlobal(stdout, st, tt);
-   STInsertSymbol(st, "sym1", 1, 42, 42);
-   STInsertSymbol(st, "sym2", 4, 42, 42);
-   st = STEnterContext(st);
-   STInsertSymbol(st, "sym3", 2, 42, 42);
-   printf("\nFilled symbol tables:\n");
-   SymbolTablePrintGlobal(stdout, st, tt);
-
-   /*
-   TypeTable_p tt =TypeTableAlloc();
-   BuildTypeTable(ast, tt);
-   TypeTablePrint(stdout, tt);
-
-   if(res == 0)
+   if(res==0)
    {
+      bool no_errors;
+
+      TypeTable_p   tt = TypeTableAlloc();
+      SymbolTable_p st = SymbolTableAlloc();
+
+      no_errors = STBuildAllTables(st, tt, ast);
+      fprintf(stdout,"Global symbols:\n---------------\n");
+      SymbolTablePrintLocal(stdout, st, tt);
+      fprintf(stdout,"\nTypes:\n------\n");
+      TypeTablePrint(stdout, tt);
+
       if(printdot)
       {
          DOTASTPrint(stdout, ast);
-      }
-      if(printexpr)
-      {
-         ExprASTPrint(stdout, ast);
-         printf("\n");
       }
       if(printsexpr)
       {
          SExprASTPrint(stdout, ast);
          printf("\n");
       }
-      ASTFree(ast);
-   }*/
+   }
    return res;
 }

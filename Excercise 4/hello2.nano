@@ -1,5 +1,7 @@
+
 Integer main()
 {
+   i = "f";		
    print "Hello World\n";
    return  0;
 }

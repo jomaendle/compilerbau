@@ -64,12 +64,12 @@
 /* Copy the first part of user declarations.  */
 #line 6 "nanoLangParser.y" /* yacc.c:339  */
 
-   # include <stdio.h>
-   # include <stdlib.h>
-   # include <stdarg.h>
-   # include "ast.h"
-   # include "types.h"
-   # include "symbols.h"
+   #include <stdio.h>
+   #include <stdlib.h>
+   #include <stdarg.h>
+   #include "ast.h"
+   #include "types.h"
+   #include "semantic.h"
 
    extern int yylex(void);
    extern int yylineno;
@@ -2021,7 +2021,6 @@ int main (int argc, char* argv[])
   int i;
   int res;
   bool printdot   = false;
-  bool printexpr  = true;
   bool printsexpr = false;
 
    ++argv, --argc;  /* skip over program name */
@@ -2031,14 +2030,12 @@ int main (int argc, char* argv[])
       if(strcmp(argv[0], "--dot")==0)
       {
          printdot   = true;
-         printexpr  = false;
          printsexpr = false;
          ++argv, --argc;
       }
       else if(strcmp(argv[0], "--sexpr")==0)
       {
          printdot   = false;
-         printexpr  = false;
          printsexpr = true;
          ++argv, --argc;
       }
@@ -2055,27 +2052,29 @@ int main (int argc, char* argv[])
 
    res = yyparse();
 
-   TypeTable_p tt =TypeTableAlloc();
-   BuildTypeTable(ast, tt);
-   TypeTablePrint(stdout, tt);
-
-   if(res == 0)
+   if(res==0)
    {
+      bool no_errors;
+
+      TypeTable_p   tt = TypeTableAlloc();
+      SymbolTable_p st = SymbolTableAlloc();
+
+      no_errors = STBuildAllTables(st, tt, ast);
+      fprintf(stdout,"Global symbols:\n---------------\n");
+      SymbolTablePrintLocal(stdout, st, tt);
+      SymbolTablePrintGlobal(stdout, st->context, tt);
+      fprintf(stdout,"\nTypes:\n------\n");
+      TypeTablePrint(stdout, tt);
+
       if(printdot)
       {
          DOTASTPrint(stdout, ast);
-      }
-      if(printexpr)
-      {
-         ExprASTPrint(stdout, ast);
-         printf("\n");
       }
       if(printsexpr)
       {
          SExprASTPrint(stdout, ast);
          printf("\n");
       }
-      ASTFree(ast);
    }
    return res;
 }

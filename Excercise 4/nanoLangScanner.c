@@ -538,7 +538,7 @@ char *yytext;
 #line 1 "nanoLangScanner.l"
 /*
     Scanner for the nanoLang compiler.
-    Authors: Rodriguez Diaz
+    Authors: Konstantin Kläger, Isabel Staaden, Carolin Rösch
 */
 #line 9 "nanoLangScanner.l"
   # include <string.h>

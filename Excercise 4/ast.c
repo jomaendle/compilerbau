@@ -1,32 +1,5 @@
-/*-----------------------------------------------------------------------
-
-File  : ast.c
-
-Author: Stephan Schulz (schulz@eprover.org)
-
-Contents
-
-  Implementation of an abstract syntax tree type.
-
-  Copyright 2015-2017 by the author.
-  This code is released under the GNU General Public Licence.
-
-Changes
-
-<1> Tue Mar 31 18:39:18 CEST 2015
-    New
-<2> Mon Mar 28 23:37:01 CEST 2016
-    Update, add ASTFree()
-
------------------------------------------------------------------------*/
-
 #include "ast.h"
 
-
-
-/*---------------------------------------------------------------------*/
-/*                        Global Variables                             */
-/*---------------------------------------------------------------------*/
 
 long nodectr=0;
 
@@ -81,27 +54,7 @@ char* ast_name[] =
    "t_ELSE",
    "idlist"
 };
-/*---------------------------------------------------------------------*/
-/*                      Forward Declarations                           */
-/*---------------------------------------------------------------------*/
 
-
-/*---------------------------------------------------------------------*/
-/*                         Internal Functions                          */
-/*---------------------------------------------------------------------*/
-
-/*-----------------------------------------------------------------------
-//
-// Function: dot_print_child()
-//
-//   Print a link from father node to child node, then print the
-//   subtree corresponding to the child in DOT syntax.
-//
-// Global Variables: -
-//
-// Side Effects    : Output
-//
-/----------------------------------------------------------------------*/
 
 static void dot_print_child(FILE* out, AST_p father, AST_p child)
 {
@@ -111,26 +64,6 @@ static void dot_print_child(FILE* out, AST_p father, AST_p child)
       DOTASTNodePrint(out, child);
    }
 }
-
-
-/*---------------------------------------------------------------------*/
-/*                         Exported Functions                          */
-/*---------------------------------------------------------------------*/
-
-
-
-
-/*-----------------------------------------------------------------------
-//
-// Function: ASTCellPrint()
-//
-//   Print an ASTCell to stdout (for debugging).
-//
-// Global Variables: Reads ast_name[]
-//
-// Side Effects    : Output
-//
-/----------------------------------------------------------------------*/
 
 void ASTCellPrint(AST_p cell)
 {
@@ -144,20 +77,6 @@ void ASTCellPrint(AST_p cell)
           cell->child[2],
           cell->child[3]);
 }
-
-
-
-/*-----------------------------------------------------------------------
-//
-// Function: ASTEmptyAlloc()
-//
-//   Allocate an empty ASTNode with no children.
-//
-// Global Variables:
-//
-// Side Effects    :
-//
-/----------------------------------------------------------------------*/
 
 AST_p ASTEmptyAlloc(void)
 {
@@ -173,20 +92,6 @@ AST_p ASTEmptyAlloc(void)
    }
    return ast;
 }
-
-
-/*-----------------------------------------------------------------------
-//
-// Function: ASTAlloc()
-//
-//   Allocate a new ASTCell, initialize it with the given values, and
-//   return a pointer to it.
-//
-// Global Variables: -
-//
-// Side Effects    : Memory operations
-//
-/----------------------------------------------------------------------*/
 
 AST_p ASTAlloc(ASTNodeType type, char* litval, long intval, AST_p child0,
                AST_p child1, AST_p child2, AST_p child3)
@@ -208,19 +113,6 @@ AST_p ASTAlloc(ASTNodeType type, char* litval, long intval, AST_p child0,
    return ast;
 }
 
-
-/*-----------------------------------------------------------------------
-//
-// Function: ASTFree()
-//
-//   Free an AST.
-//
-// Global Variables: -
-//
-// Side Effects    : Memory operations
-//
-/----------------------------------------------------------------------*/
-
 void ASTFree(AST_p junk)
 {
    if(junk)
@@ -235,20 +127,6 @@ void ASTFree(AST_p junk)
    }
    ASTCellFree(junk);
 }
-
-
-
-/*-----------------------------------------------------------------------
-//
-// Function: DOTASTNodePrint()
-//
-//   Print an AST node and its children in DOT notation.
-//
-// Global Variables: -
-//
-// Side Effects    : Output
-//
-/----------------------------------------------------------------------*/
 
 void DOTASTNodePrint(FILE* out, AST_p ast)
 {
@@ -281,37 +159,12 @@ void DOTASTNodePrint(FILE* out, AST_p ast)
    }
 }
 
-/*-----------------------------------------------------------------------
-//
-// Function: DOTASTPrint()
-//
-//   Print a complete AST as a DOT format graph.
-//
-// Global Variables: -
-//
-// Side Effects    : Output
-//
-/----------------------------------------------------------------------*/
-
 void DOTASTPrint(FILE* out, AST_p ast)
 {
    fprintf(out, "digraph ast {\n   ordering=out\n");
    DOTASTNodePrint(out, ast);
    fprintf(out, "}\n");
 }
-
-/*-----------------------------------------------------------------------
-//
-// Function: ExprASTPrint()
-//
-//   Print an AST representing a nanoLang expression back as an
-//   equivalent nanoLang expression.
-//
-// Global Variables: -
-//
-// Side Effects    : Output
-//
-/----------------------------------------------------------------------*/
 
 void ExprASTPrint(FILE* out, AST_p ast)
 {
@@ -414,13 +267,6 @@ void ExprASTPrint(FILE* out, AST_p ast)
            fprintf(out, "else ");
            ExprASTPrint(out, ast->child[3]);
          }
-         fprintf(out, ")");
-         break;
-   case idlist:
-         fprintf(out, "(");
-         ExprASTPrint(out, ast->child[0]);
-         fprintf(out, " ");
-         ExprASTPrint(out, ast->child[1]);
          fprintf(out, ")");
          break;
    // case else_stmt:
@@ -580,25 +426,17 @@ void ExprASTPrint(FILE* out, AST_p ast)
          break;
    // case t_ELSE:
    //       break;
+   case idlist:
+         ExprASTPrint(out, ast->child[0]);
+         fprintf(out, ", ");
+         ExprASTPrint(out, ast->child[1]);
+         break;
+
    default:
          fprintf(out, "Unexpected construct: %s\n", ast_name[ast->type]);
          break;
    }
 }
-
-
-/*-----------------------------------------------------------------------
-//
-// Function: SExprASTPrint()
-//
-//   Print an AST representing a nanoLang construct as an
-//   s-expression.
-//
-// Global Variables: -
-//
-// Side Effects    : Output
-//
-/----------------------------------------------------------------------*/
 
 void SExprASTPrint(FILE* out, AST_p ast)
 {
@@ -632,8 +470,3 @@ void SExprASTPrint(FILE* out, AST_p ast)
       }
    }
 }
-
-
-/*---------------------------------------------------------------------*/
-/*                        End of File                                  */
-/*---------------------------------------------------------------------*/

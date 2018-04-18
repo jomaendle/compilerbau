@@ -7,8 +7,8 @@
 
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
-#define YY_FLEX_MINOR_VERSION 6
-#define YY_FLEX_SUBMINOR_VERSION 0
+#define YY_FLEX_MINOR_VERSION 5
+#define YY_FLEX_SUBMINOR_VERSION 35
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -46,6 +46,7 @@ typedef int16_t flex_int16_t;
 typedef uint16_t flex_uint16_t;
 typedef int32_t flex_int32_t;
 typedef uint32_t flex_uint32_t;
+typedef uint64_t flex_uint64_t;
 #else
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
@@ -53,6 +54,7 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
+#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -82,8 +84,6 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
-
-#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -141,15 +141,7 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k.
- * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
- * Ditto for the __ia64__ case accordingly.
- */
-#define YY_BUF_SIZE 32768
-#else
 #define YY_BUF_SIZE 16384
-#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -183,16 +175,9 @@ extern FILE *yyin, *yyout;
      */
     #define  YY_LESS_LINENO(n) \
             do { \
-                int yyl;\
+                yy_size_t yyl;\
                 for ( yyl = n; yyl < yyleng; ++yyl )\
                     if ( yytext[yyl] == '\n' )\
-                        --yylineno;\
-            }while(0)
-    #define YY_LINENO_REWIND_TO(dst) \
-            do {\
-                const char *p;\
-                for ( p = yy_cp-1; p >= (dst); --p)\
-                    if ( *p == '\n' )\
                         --yylineno;\
             }while(0)
     
@@ -229,7 +214,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	int yy_n_chars;
+	yy_size_t yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -299,7 +284,7 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when yytext is formed. */
 static char yy_hold_char;
-static int yy_n_chars;		/* number of characters read into yy_ch_buf */
+static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
 yy_size_t yyleng;
 
 /* Points to current character in buffer. */
@@ -360,7 +345,7 @@ void yyfree (void *  );
 
 /* Begin user sect3 */
 
-#define yywrap() (/*CONSTCOND*/1)
+#define yywrap(n) 1
 #define YY_SKIP_YYWRAP
 
 typedef unsigned char YY_CHAR;
@@ -374,17 +359,11 @@ extern int yylineno;
 int yylineno = 1;
 
 extern char *yytext;
-#ifdef yytext_ptr
-#undef yytext_ptr
-#endif
 #define yytext_ptr yytext
 
 static yy_state_type yy_get_previous_state (void );
 static yy_state_type yy_try_NUL_trans (yy_state_type current_state  );
 static int yy_get_next_buffer (void );
-#if defined(__GNUC__) && __GNUC__ >= 3
-__attribute__((__noreturn__))
-#endif
 static void yy_fatal_error (yyconst char msg[]  );
 
 /* Done after the current pattern has been matched and before the
@@ -392,7 +371,7 @@ static void yy_fatal_error (yyconst char msg[]  );
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	yyleng = (size_t) (yy_cp - yy_bp); \
+	yyleng = (yy_size_t) (yy_cp - yy_bp); \
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
@@ -408,16 +387,16 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[69] =
     {   0,
-        0,    0,   32,   30,   29,   28,   30,   30,    1,   12,
-       13,   18,   20,   17,   21,   19,    9,   16,   22,   27,
-       24,   11,   11,   11,   11,   11,   11,   11,   11,   14,
-       15,   26,    0,   10,    1,    9,   23,   25,   11,   11,
-       11,   11,    6,   11,   11,   11,   11,   11,   11,   11,
-       11,   11,   11,   11,    7,   11,   11,   11,   11,   11,
-        4,   11,    8,   11,    3,    5,    2,    0
+        0,    0,   32,   30,   29,   28,   30,   30,   27,    1,
+        2,    3,    5,   16,    6,    4,   26,   15,   10,    7,
+        9,   24,   24,   24,   24,   24,   24,   24,   24,   13,
+       14,    8,    0,   25,   27,   26,   12,   11,   24,   24,
+       24,   24,   19,   24,   24,   24,   24,   24,   24,   24,
+       24,   24,   24,   24,   20,   24,   24,   24,   24,   24,
+       23,   24,   21,   24,   18,   22,   17,    0
     } ;
 
-static yyconst YY_CHAR yy_ec[256] =
+static yyconst flex_int32_t yy_ec[256] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
@@ -449,7 +428,7 @@ static yyconst YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst YY_CHAR yy_meta[37] =
+static yyconst flex_int32_t yy_meta[37] =
     {   0,
         1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    3,    1,    1,    1,    1,    3,    3,
@@ -457,7 +436,7 @@ static yyconst YY_CHAR yy_meta[37] =
         3,    3,    3,    3,    1,    1
     } ;
 
-static yyconst flex_uint16_t yy_base[72] =
+static yyconst flex_int16_t yy_base[72] =
     {   0,
         0,    0,   78,   79,   79,   79,   60,   71,    0,   79,
        79,   79,   79,   79,   79,   79,   61,   79,   57,   79,
@@ -481,7 +460,7 @@ static yyconst flex_int16_t yy_def[72] =
        68
     } ;
 
-static yyconst flex_uint16_t yy_nxt[116] =
+static yyconst flex_int16_t yy_nxt[116] =
     {   0,
         4,    5,    6,    7,    8,    9,   10,   11,   12,   13,
        14,   15,   16,   17,   18,   19,   20,   21,   22,   23,
@@ -518,8 +497,8 @@ static yyconst flex_int16_t yy_chk[116] =
 /* Table of booleans, true if rule could match eol. */
 static yyconst flex_int32_t yy_rule_can_match_eol[32] =
     {   0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,     };
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -535,25 +514,33 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "nanoLangScanner.l"
-/*
-    Scanner for the nanoLang compiler.
-    Authors: Rodriguez Diaz
+#line 1 "nanolex.l"
+/* -*- Mode: c -*-
+Lexer for a minimal programming language "nanoLang"
+Copyright 2015-2017 by Stephan Schulz, schulz@eprover.org.
+This code is released under the GNU General Public Licence
+Version 2.
 */
-#line 9 "nanoLangScanner.l"
-  # include <string.h>
-  # include "ast.h"
-  # include "nanoLangParser.tab.h"
+#line 15 "nanolex.l"
+   #include <string.h>
+   #include "ast.h"
+   #include "nanoparse.tab.h"
 
+   int yycol = 1;
 
-  int yycolno = 1;
-  void yyerror(char *err, ...);
-
-  #define YY_USER_ACTION {\
+#define YY_USER_ACTION {\
       yylval=ASTEmptyAlloc();\
       yylval->litval = strdup(yytext);\
+      \
+      yylloc.first_line = yylloc.last_line = yylineno;   \
+      yylloc.first_column = yycol; \
+      yycol += yyleng;\
+      yylloc.last_column = yycol-1;\
+      yylval->line = yylloc.first_line;           \
+      yylval->column = yylloc.first_column;           \
    }
-#line 557 "<stdout>"
+
+#line 544 "<stdout>"
 
 #define INITIAL 0
 
@@ -586,11 +573,11 @@ void yyset_extra (YY_EXTRA_TYPE user_defined  );
 
 FILE *yyget_in (void );
 
-void yyset_in  (FILE * _in_str  );
+void yyset_in  (FILE * in_str  );
 
 FILE *yyget_out (void );
 
-void yyset_out  (FILE * _out_str  );
+void yyset_out  (FILE * out_str  );
 
 yy_size_t yyget_leng (void );
 
@@ -598,7 +585,7 @@ char *yyget_text (void );
 
 int yyget_lineno (void );
 
-void yyset_lineno (int _line_number  );
+void yyset_lineno (int line_number  );
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -612,12 +599,8 @@ extern int yywrap (void );
 #endif
 #endif
 
-#ifndef YY_NO_UNPUT
-    
     static void yyunput (int c,char *buf_ptr  );
     
-#endif
-
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int );
 #endif
@@ -638,12 +621,7 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k */
-#define YY_READ_BUF_SIZE 16384
-#else
 #define YY_READ_BUF_SIZE 8192
-#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -651,7 +629,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO do { if (fwrite( yytext, yyleng, 1, yyout )) {} } while (0)
+#define ECHO fwrite( yytext, yyleng, 1, yyout )
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -662,7 +640,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		size_t n; \
+		yy_size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -730,7 +708,7 @@ extern int yylex (void);
 
 /* Code executed at the end of each rule. */
 #ifndef YY_BREAK
-#define YY_BREAK /*LINTED*/break;
+#define YY_BREAK break;
 #endif
 
 #define YY_RULE_SETUP \
@@ -740,10 +718,15 @@ extern int yylex (void);
  */
 YY_DECL
 {
-	yy_state_type yy_current_state;
-	char *yy_cp, *yy_bp;
-	int yy_act;
+	register yy_state_type yy_current_state;
+	register char *yy_cp, *yy_bp;
+	register int yy_act;
     
+#line 43 "nanolex.l"
+
+
+#line 729 "<stdout>"
+
 	if ( !(yy_init) )
 		{
 		(yy_init) = 1;
@@ -770,14 +753,7 @@ YY_DECL
 		yy_load_buffer_state( );
 		}
 
-	{
-#line 24 "nanoLangScanner.l"
-
-
-
-#line 779 "<stdout>"
-
-	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
+	while ( 1 )		/* loops until end-of-file is reached */
 		{
 		yy_cp = (yy_c_buf_p);
 
@@ -793,7 +769,7 @@ YY_DECL
 yy_match:
 		do
 			{
-			YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)] ;
+			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
 			if ( yy_accept[yy_current_state] )
 				{
 				(yy_last_accepting_state) = yy_current_state;
@@ -844,162 +820,163 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 27 "nanoLangScanner.l"
-{  /* Skip comments */  }
+#line 45 "nanolex.l"
+{return OPENPAR;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 28 "nanoLangScanner.l"
-{ yylval->type = t_INTEGER; return INTEGER; }
+#line 46 "nanolex.l"
+{return CLOSEPAR;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 29 "nanoLangScanner.l"
-{ yylval->type = t_STRING; return STRING; }
+#line 47 "nanolex.l"
+{yylval->type = t_MULT; return MULT;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 30 "nanoLangScanner.l"
-{ yylval->type = t_PRINT; return PRINT; }
+#line 48 "nanolex.l"
+{yylval->type = t_DIV; return DIV;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 31 "nanoLangScanner.l"
-{ yylval->type = t_RETURN; return RETURN; }
+#line 49 "nanolex.l"
+{yylval->type = t_PLUS; return PLUS;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 32 "nanoLangScanner.l"
-{ yylval->type = t_IF; return IF; }
+#line 50 "nanolex.l"
+{yylval->type = t_MINUS; return MINUS;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 33 "nanoLangScanner.l"
-{ yylval->type = t_ELSE; return ELSE; }
+#line 51 "nanolex.l"
+{yylval->type = t_EQ; return EQ;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 34 "nanoLangScanner.l"
-{ yylval->type = t_WHILE; return WHILE; }
+#line 52 "nanolex.l"
+{yylval->type = t_NEQ; return NEQ;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 35 "nanoLangScanner.l"
-{ yylval->type = t_INTLIT; yylval->intval = atol(yytext); return INTLIT; }
+#line 53 "nanolex.l"
+{yylval->type = t_GT; return GT;}
 	YY_BREAK
 case 10:
-/* rule 10 can match eol */
 YY_RULE_SETUP
-#line 36 "nanoLangScanner.l"
-{ yylval->type = t_STRINGLIT; return STRINGLIT; }
+#line 54 "nanolex.l"
+{yylval->type = t_LT; return LT;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 37 "nanoLangScanner.l"
-{ yylval->type = t_IDENT; return IDENT; }
+#line 55 "nanolex.l"
+{yylval->type = t_GEQ; return GEQ;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 38 "nanoLangScanner.l"
-{ return OPENPAR; }
+#line 56 "nanolex.l"
+{yylval->type = t_LEQ; return LEQ;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 39 "nanoLangScanner.l"
-{ return CLOSEPAR; }
+#line 57 "nanolex.l"
+{return OPENCURLY;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 40 "nanoLangScanner.l"
-{ return OPENCURLY; }
+#line 58 "nanolex.l"
+{return CLOSECURLY;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 41 "nanoLangScanner.l"
-{ return CLOSECURLY; }
+#line 59 "nanolex.l"
+{return SEMICOLON;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 42 "nanoLangScanner.l"
-{ return SEMICOLON; }
+#line 60 "nanolex.l"
+{return COMA;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 43 "nanoLangScanner.l"
-{ return COMMA; }
+#line 62 "nanolex.l"
+{yylval->type = t_INTEGER; return INTEGER;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 44 "nanoLangScanner.l"
-{ yylval->type = t_MULT; return MULT; }
+#line 63 "nanolex.l"
+{yylval->type = t_STRING; return STRING;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 45 "nanoLangScanner.l"
-{ yylval->type = t_DIV; return DIV; }
+#line 64 "nanolex.l"
+{return IF;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 46 "nanoLangScanner.l"
-{ yylval->type = t_PLUS; return PLUS; }
+#line 65 "nanolex.l"
+{return ELSE;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 47 "nanoLangScanner.l"
-{ yylval->type = t_MINUS; return MINUS; }
+#line 66 "nanolex.l"
+{return WHILE;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 48 "nanoLangScanner.l"
-{ yylval->type = t_LT; return LT; }
+#line 67 "nanolex.l"
+{return RETURN;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 49 "nanoLangScanner.l"
-{ yylval->type = t_LEQ; return LEQ; }
+#line 68 "nanolex.l"
+{return PRINT;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 50 "nanoLangScanner.l"
-{ yylval->type = t_GT; return GT; }
+#line 70 "nanolex.l"
+{yylval->type = t_IDENT; return IDENT;}
 	YY_BREAK
 case 25:
+/* rule 25 can match eol */
 YY_RULE_SETUP
-#line 51 "nanoLangScanner.l"
-{ yylval->type = t_GEQ; return GEQ; }
+#line 72 "nanolex.l"
+{yylval->type = t_STRINGLIT; return STRINGLIT;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 52 "nanoLangScanner.l"
-{ yylval->type = t_NEQ; return NEQ; }
+#line 74 "nanolex.l"
+{yylval->type = t_INTLIT; yylval->intval = atol(yytext); return INTLIT;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 53 "nanoLangScanner.l"
-{ yylval->type = t_EQ; return EQ; }
+#line 77 "nanolex.l"
+{ /* Eat comments */}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 54 "nanoLangScanner.l"
-{ yycolno = 1; }
+#line 79 "nanolex.l"
+{yycol=1;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 55 "nanoLangScanner.l"
+#line 81 "nanolex.l"
 { /* Skip  whitespace*/ }
 	YY_BREAK
+/* Everything else is an invalid character. */
 case 30:
 YY_RULE_SETUP
-#line 56 "nanoLangScanner.l"
-{ yyerror("Unexpected charater: %c", *yytext); }
+#line 84 "nanolex.l"
+{return ERROR;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 59 "nanoLangScanner.l"
+#line 86 "nanolex.l"
 ECHO;
 	YY_BREAK
-#line 1003 "<stdout>"
+#line 980 "<stdout>"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1130,7 +1107,6 @@ case YY_STATE_EOF(INITIAL):
 			"fatal flex scanner internal error--no action found" );
 	} /* end of action switch */
 		} /* end of scanning one token */
-	} /* end of user's declarations */
 } /* end of yylex */
 
 /* yy_get_next_buffer - try to read in a new buffer
@@ -1142,9 +1118,9 @@ case YY_STATE_EOF(INITIAL):
  */
 static int yy_get_next_buffer (void)
 {
-    	char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
-	char *source = (yytext_ptr);
-	yy_size_t number_to_move, i;
+    	register char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
+	register char *source = (yytext_ptr);
+	register int number_to_move, i;
 	int ret_val;
 
 	if ( (yy_c_buf_p) > &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars) + 1] )
@@ -1173,7 +1149,7 @@ static int yy_get_next_buffer (void)
 	/* Try to read more data. */
 
 	/* First move last chars to start of buffer. */
-	number_to_move = (yy_size_t) ((yy_c_buf_p) - (yytext_ptr)) - 1;
+	number_to_move = (int) ((yy_c_buf_p) - (yytext_ptr)) - 1;
 
 	for ( i = 0; i < number_to_move; ++i )
 		*(dest++) = *(source++);
@@ -1193,7 +1169,7 @@ static int yy_get_next_buffer (void)
 			{ /* Not enough room in the buffer - grow it. */
 
 			/* just a shorter name for the current buffer */
-			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
 
 			int yy_c_buf_p_offset =
 				(int) ((yy_c_buf_p) - b->yy_ch_buf);
@@ -1255,9 +1231,9 @@ static int yy_get_next_buffer (void)
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
 
-	if ((int) ((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+	if ((yy_size_t) ((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
-		int new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
+		yy_size_t new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,new_size  );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
 			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
@@ -1276,14 +1252,14 @@ static int yy_get_next_buffer (void)
 
     static yy_state_type yy_get_previous_state (void)
 {
-	yy_state_type yy_current_state;
-	char *yy_cp;
+	register yy_state_type yy_current_state;
+	register char *yy_cp;
     
 	yy_current_state = (yy_start);
 
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
 		{
-		YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
+		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
 		if ( yy_accept[yy_current_state] )
 			{
 			(yy_last_accepting_state) = yy_current_state;
@@ -1308,10 +1284,10 @@ static int yy_get_next_buffer (void)
  */
     static yy_state_type yy_try_NUL_trans  (yy_state_type yy_current_state )
 {
-	int yy_is_jam;
-    	char *yy_cp = (yy_c_buf_p);
+	register int yy_is_jam;
+    	register char *yy_cp = (yy_c_buf_p);
 
-	YY_CHAR yy_c = 1;
+	register YY_CHAR yy_c = 1;
 	if ( yy_accept[yy_current_state] )
 		{
 		(yy_last_accepting_state) = yy_current_state;
@@ -1326,14 +1302,12 @@ static int yy_get_next_buffer (void)
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 	yy_is_jam = (yy_current_state == 68);
 
-		return yy_is_jam ? 0 : yy_current_state;
+	return yy_is_jam ? 0 : yy_current_state;
 }
 
-#ifndef YY_NO_UNPUT
-
-    static void yyunput (int c, char * yy_bp )
+    static void yyunput (int c, register char * yy_bp )
 {
-	char *yy_cp;
+	register char *yy_cp;
     
     yy_cp = (yy_c_buf_p);
 
@@ -1343,10 +1317,10 @@ static int yy_get_next_buffer (void)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
-		yy_size_t number_to_move = (yy_n_chars) + 2;
-		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
+		register yy_size_t number_to_move = (yy_n_chars) + 2;
+		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
-		char *source =
+		register char *source =
 				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
 
 		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
@@ -1371,8 +1345,6 @@ static int yy_get_next_buffer (void)
 	(yy_hold_char) = *yy_cp;
 	(yy_c_buf_p) = yy_cp;
 }
-
-#endif
 
 #ifndef YY_NO_INPUT
 #ifdef __cplusplus
@@ -1422,7 +1394,7 @@ static int yy_get_next_buffer (void)
 				case EOB_ACT_END_OF_FILE:
 					{
 					if ( yywrap( ) )
-						return EOF;
+						return 0;
 
 					if ( ! (yy_did_buffer_switch_on_eof) )
 						YY_NEW_FILE;
@@ -1528,7 +1500,7 @@ static void yy_load_buffer_state  (void)
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
 
-	b->yy_buf_size = (yy_size_t)size;
+	b->yy_buf_size = size;
 
 	/* yy_ch_buf has to be 2 characters longer than the size given because
 	 * we need to put in 2 end-of-buffer characters.
@@ -1563,6 +1535,10 @@ static void yy_load_buffer_state  (void)
 	yyfree((void *) b  );
 }
 
+#ifndef __cplusplus
+extern int isatty (int );
+#endif /* __cplusplus */
+    
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a yyrestart() or at EOF.
@@ -1683,7 +1659,7 @@ static void yyensure_buffer_stack (void)
 		 * scanner will even need a stack. We use 2 instead of 1 to avoid an
 		 * immediate realloc on the next call.
          */
-		num_to_alloc = 1; /* After all that talk, this was set to 1 anyways... */
+		num_to_alloc = 1;
 		(yy_buffer_stack) = (struct yy_buffer_state**)yyalloc
 								(num_to_alloc * sizeof(struct yy_buffer_state*)
 								);
@@ -1700,7 +1676,7 @@ static void yyensure_buffer_stack (void)
 	if ((yy_buffer_stack_top) >= ((yy_buffer_stack_max)) - 1){
 
 		/* Increase the buffer to prepare for a possible push. */
-		yy_size_t grow_size = 8 /* arbitrary grow size */;
+		int grow_size = 8 /* arbitrary grow size */;
 
 		num_to_alloc = (yy_buffer_stack_max) + grow_size;
 		(yy_buffer_stack) = (struct yy_buffer_state**)yyrealloc
@@ -1767,8 +1743,8 @@ YY_BUFFER_STATE yy_scan_string (yyconst char * yystr )
 
 /** Setup the input buffer state to scan the given bytes. The next call to yylex() will
  * scan from a @e copy of @a bytes.
- * @param yybytes the byte buffer to scan
- * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
+ * @param bytes the byte buffer to scan
+ * @param len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
@@ -1776,8 +1752,7 @@ YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len 
 {
 	YY_BUFFER_STATE b;
 	char *buf;
-	yy_size_t n;
-	yy_size_t i;
+	yy_size_t n, i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
@@ -1808,7 +1783,7 @@ YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len 
 
 static void yy_fatal_error (yyconst char* msg )
 {
-			(void) fprintf( stderr, "%s\n", msg );
+    	(void) fprintf( stderr, "%s\n", msg );
 	exit( YY_EXIT_FAILURE );
 }
 
@@ -1874,29 +1849,29 @@ char *yyget_text  (void)
 }
 
 /** Set the current line number.
- * @param _line_number line number
+ * @param line_number
  * 
  */
-void yyset_lineno (int  _line_number )
+void yyset_lineno (int  line_number )
 {
     
-    yylineno = _line_number;
+    yylineno = line_number;
 }
 
 /** Set the input stream. This does not discard the current
  * input buffer.
- * @param _in_str A readable stream.
+ * @param in_str A readable stream.
  * 
  * @see yy_switch_to_buffer
  */
-void yyset_in (FILE *  _in_str )
+void yyset_in (FILE *  in_str )
 {
-        yyin = _in_str ;
+        yyin = in_str ;
 }
 
-void yyset_out (FILE *  _out_str )
+void yyset_out (FILE *  out_str )
 {
-        yyout = _out_str ;
+        yyout = out_str ;
 }
 
 int yyget_debug  (void)
@@ -1904,9 +1879,9 @@ int yyget_debug  (void)
         return yy_flex_debug;
 }
 
-void yyset_debug (int  _bdebug )
+void yyset_debug (int  bdebug )
 {
-        yy_flex_debug = _bdebug ;
+        yy_flex_debug = bdebug ;
 }
 
 static int yy_init_globals (void)
@@ -1969,8 +1944,7 @@ int yylex_destroy  (void)
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
-		
-	int i;
+	register int i;
 	for ( i = 0; i < n; ++i )
 		s1[i] = s2[i];
 }
@@ -1979,7 +1953,7 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 #ifdef YY_NEED_STRLEN
 static int yy_flex_strlen (yyconst char * s )
 {
-	int n;
+	register int n;
 	for ( n = 0; s[n]; ++n )
 		;
 
@@ -1989,12 +1963,11 @@ static int yy_flex_strlen (yyconst char * s )
 
 void *yyalloc (yy_size_t  size )
 {
-			return (void *) malloc( size );
+	return (void *) malloc( size );
 }
 
 void *yyrealloc  (void * ptr, yy_size_t  size )
 {
-		
 	/* The cast to (char *) in the following accommodates both
 	 * implementations that use char* generic pointers, and those
 	 * that use void* generic pointers.  It works with the latter
@@ -2007,12 +1980,12 @@ void *yyrealloc  (void * ptr, yy_size_t  size )
 
 void yyfree (void * ptr )
 {
-			free( (char *) ptr );	/* see yyrealloc() for (char *) cast */
+	free( (char *) ptr );	/* see yyrealloc() for (char *) cast */
 }
 
 #define YYTABLES_NAME "yytables"
 
-#line 59 "nanoLangScanner.l"
+#line 86 "nanolex.l"
 
 
 

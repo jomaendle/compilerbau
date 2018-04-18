@@ -18,7 +18,7 @@ tags:
 
 nanoLangScanner.c: nanoLangScanner.l nanoLangParser.tab.h
 
-nanoLangParser.tab.h: nanoLangParser.y ast.h types.h symbols.h
+nanoLangParser.tab.h: nanoLangParser.y ast.h types.h semantic.h symbols.h
 	$(YACC) --verbose -d nanoLangParser.y
 
 nanoLangParser.tab.c: nanoLangParser.y ast.h
@@ -32,5 +32,7 @@ types.o: types.c types.h
 
 symbols.o: symbols.c symbols.h types.h
 
-nanoLangCompiler: nanoLangScanner.o nanoLangParser.tab.o ast.o types.o symbols.o
-	$(LD) nanoLangScanner.o nanoLangParser.tab.o ast.o types.o symbols.o -o nanoLangCompiler
+semantic.o: ast.h types.h symbols.h semantic.h
+
+nanoLangCompiler: nanoLangScanner.o nanoLangParser.tab.o ast.o types.o symbols.o semantic.o
+	$(LD) nanoLangScanner.o nanoLangParser.tab.o ast.o types.o symbols.o semantic.o -o nanoLangCompiler
